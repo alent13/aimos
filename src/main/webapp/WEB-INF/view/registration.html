@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/ultimatebg.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/extras.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/modules.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nautilus.css}">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/logo.png}"/>
+
+    <script th:src="@{/js/registration.js}"></script>
+    <script th:src="@{/js/validator.js}"></script>
+    <script th:src="@{/js/jquery.complexify.min.js}"></script>
+</head>
+<body scroll="yes" class="colorBg colorBgBlue">
+<form action="/registration" method="post" id="registrationForm">
+    <div class="container">
+        <div class="module-container panel-group animated fadeInUp">
+            <div class="panel panel-primary">
+                <div style="text-align: center;" class="panel-heading">
+                    <button type="button" class="close" style="float: left" onclick="history.back()">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </button>
+                    <h4 class="panel-title">
+                        Регистрация
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <div id="login_group" class="form-group">
+                            <label for="login"><span class="glyphicon glyphicon-user"></span> Логин</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">@</span>
+                                <input type="text" class="form-control" name="login" id="login"
+                                       placeholder="Введите логин" data-toggle="tooltip" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="password"><span class="glyphicon glyphicon-lock"></span> Пароль</label>
+                                <input type="password" name="password" id="password" class="form-control input-sm"
+                                       placeholder="Не менее 8 символов" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="password_confirmation">Подтверждение</label>
+                                <input type="password" name="password_confirmation" id="password_confirmation"
+                                       class="form-control input-sm" placeholder="Повторите пароль" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label for="password_confirmation">Сложность пароля (не менее 30%)</label>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                     id="strength-progress"
+                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                                     style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label for="name">Имя</label>
+                            <input type="text" name="name" id="name" class="form-control input-sm"
+                                   placeholder="Ваше имя">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label for="surname">Фамилия</label>
+                            <input type="text" name="surname" id="surname" class="form-control input-sm"
+                                   placeholder="Ваша фамилия">
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; border-radius: 0" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#extra_collapse" data-toggle="collapse">
+                            Дополнительно
+                        </a>
+                    </h4>
+                </div>
+                <div id="extra_collapse" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="email"><span class="glyphicon glyphicon-envelope"></span> E-mail</label>
+                            <input type="email" name="email" id="email" class="form-control input-sm"
+                                   placeholder="Введите Email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone"><span class="glyphicon glyphicon-earphone"></span> Телефон</label>
+                            <input type="text" name="phone" id="phone" class="form-control input-sm"
+                                   placeholder="Введите телефон">
+                        </div>
+
+                        <div style="margin-bottom: 0" class="form-group">
+                            <label for="about_me"><span class="glyphicon glyphicon-paperclip"></span> Обо мне</label>
+                            <textarea style="resize: none" class="form-control" rows="5" id="about_me"
+                                      placeholder="Расскажите о себе"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <hr style="margin: 0;">
+                <div class="panel-body">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Зарегистрироваться
+                    </button>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-body">Уже есть аккаунта? <a href="/login">Войти.</a></div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

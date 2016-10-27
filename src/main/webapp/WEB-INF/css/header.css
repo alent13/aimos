@@ -1,0 +1,17 @@
+@import "nautilus.css";
+
+.headertext {
+    font-family: 'Nautilus Pompilius', "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: xx-large;
+}
+
+.navbar-header {
+    float: left;
+    padding: 15px;
+    text-align: center;
+    width: 100%;
+}
+.headertext:hover,
+.headertext:focus {
+    text-decoration: none;
+}

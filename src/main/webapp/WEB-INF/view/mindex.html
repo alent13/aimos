@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Сообщения</title>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/ultimatebg.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/modules.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/extras.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/messages-extras.css}">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/logo.png}"/>
+
+</head>
+<body style="padding-top: 0;" class="wided colorBg colorBgBlue">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div style="padding: 0; vertical-align: middle" class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-left btn glyphicon glyphicon-menu-hamburger"></span>
+            <a class="headertext" href="#">Aimos</a>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <button class="btn btn-default btn-lg btn-link dropdown-toggle" data-toggle="dropdown" style="font-size:20px; padding-bottom: 0;">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                    </button>
+                    <span style="margin: 1px" class="badge badge-notify">3</span>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Another action</a></li>
+                    </ul>
+                </li>
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div id="navigation" class="col-sm-2 sidenav sidebar">
+            <p><a href="#">Link</a></p>
+            <p><a href="#">Link</a></p>
+            <p><a href="#">Link</a></p>
+        </div>
+        <div class="col-sm-8 text-left">
+            <h1>Welcome</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                ut aliquip ex ea commodo consequat.</p>
+            <hr>
+            <h3>Test</h3>
+            <p>Lorem ipsum...</p>
+        </div>
+        <div class="col-sm-2 sidenav sidebar">
+            <div class="well">
+                <p>ADS</p>
+            </div>
+            <div class="well">
+                <p>ADS</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

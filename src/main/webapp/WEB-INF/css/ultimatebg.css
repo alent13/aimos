@@ -1,0 +1,41 @@
+.colorBg {
+    padding: 50px 0;
+    min-height: 100%;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+    position: relative;
+    -o-box-shadow: inset 0 3px 3px -3px rgba(0, 0, 0, 0.3);
+    -ms-box-shadow: inset 0 3px 3px -3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: inset 0 3px 3px -3px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 3px 3px -3px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 3px 3px -3px rgba(0, 0, 0, 0.3);
+}
+.colorBg.colorBgBlue {
+    background-color: #3498db;
+    background-image: -ms-radial-gradient(center top, circle farthest-side, #8bc4ea 0%, #3498db 100%);
+    background-image: -moz-radial-gradient(center top, circle farthest-side, #8bc4ea 0%, #3498db 100%);
+    background-image: -o-radial-gradient(center top, circle farthest-side, #8bc4ea 0%, #3498db 100%);
+    background-image: -webkit-gradient(radial, center top, 0, center top, 487, color-stop(0, #8bc4ea), color-stop(1, #3498db));
+    background-image: -webkit-radial-gradient(center top, circle farthest-side, #8bc4ea 0%, #3498db 100%);
+    background-image: radial-gradient(circle farthest-side at center top, #8bc4ea 0%, #3498db 100%);
+}
+.colorBg.colorBgGreen {
+    background-color: #2ecc71;
+    background-image: -ms-radial-gradient(center top, circle farthest-side, #7ee2a8 0%, #2ecc71 100%);
+    background-image: -moz-radial-gradient(center top, circle farthest-side, #7ee2a8 0%, #2ecc71 100%);
+    background-image: -o-radial-gradient(center top, circle farthest-side, #7ee2a8 0%, #2ecc71 100%);
+    background-image: -webkit-gradient(radial, center top, 0, center top, 487, color-stop(0, #7ee2a8), color-stop(1, #2ecc71));
+    background-image: -webkit-radial-gradient(center top, circle farthest-side, #7ee2a8 0%, #2ecc71 100%);
+    background-image: radial-gradient(circle farthest-side at center top, #7ee2a8 0%, #2ecc71 100%);
+}
+.colorBg.colorBgPurple {
+    background-color: #9b59b6;
+    background-image: -ms-radial-gradient(center top, circle farthest-side, #c6a0d5 0%, #9b59b6 100%);
+    background-image: -moz-radial-gradient(center top, circle farthest-side, #c6a0d5 0%, #9b59b6 100%);
+    background-image: -o-radial-gradient(center top, circle farthest-side, #c6a0d5 0%, #9b59b6 100%);
+    background-image: -webkit-gradient(radial, center top, 0, center top, 487, color-stop(0, #c6a0d5), color-stop(1, #9b59b6));
+    background-image: -webkit-radial-gradient(center top, circle farthest-side, #c6a0d5 0%, #9b59b6 100%);
+    background-image: radial-gradient(circle farthest-side at center top, #c6a0d5 0%, #9b59b6 100%);
+}

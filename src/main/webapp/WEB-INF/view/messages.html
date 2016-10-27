@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aimos messages page">
+    <meta name="author" content="applexis">
+
+    <title>Aimos</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/img/logo.png" />
+
+    <link href="/css/sidebar.css" rel="stylesheet">
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/messages-extras.css" rel="stylesheet">
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+    <script src="/js/extra.js"></script>
+
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="left-navbar">
+                    <div id="sidebar-wrapper">
+                        <ul class="nav navbar-left list">
+                            <li>
+                                <ul class="user-info">
+                                    <li>
+                                        <a href="#" >@exort</a>
+                                    </li>
+                                    <li>
+                                        <img id="user-logo" src="img/default-user-male.png" class="logo">
+                                    </li>
+                                    <li>
+
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-divider"></li>
+                            <li>
+                                <a href="#">
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                    <span>Сообщения</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    <span>Контакты</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /#sidebar-wrapper -->
+                </div>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="#menu-toggle" class="navbar-brand" id="menu-toggle">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    </a>
+                    <a class="navbar-brand headertext menu" href="#">Aimos</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <button class="btn btn-default btn-lg btn-link dropdown-toggle" data-toggle="dropdown" style="font-size:20px; padding-bottom: 0;">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                        </button>
+                        <span style="margin: 1px" class="badge badge-notify">3</span>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Another action</a></li>
+                        </ul>
+                    </li>
+                    <li><a id="login_modal_btn" href="#"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    </div>
+
+</body>
+</html>

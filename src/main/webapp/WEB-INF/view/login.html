@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/ultimatebg.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/modules.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/extras.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/logo.png}"/>
+
+    <script th:src="@{/js/login.js}"></script>
+</head>
+<body class="wided colorBg colorBgBlue">
+<div class="container">
+    <div class="module-container panel-group animated fadeInUp">
+        <div class="panel panel-primary">
+            <div style="text-align: center" class="panel-heading">
+                <button type="button" class="close" style="float: left" onclick="history.back()">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </button>
+                Вход
+            </div>
+            <div class="panel-body">
+                <form action="/login" method="post">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <h5 style="font-family: sans-serif">Ошибка. Неверный логин или пароль.</h5>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username"><span class="glyphicon glyphicon-user"></span> Логин</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">@</span>
+                            <input type="text" class="form-control" name="username" id="username" placeholder="Введите логин"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><span class="glyphicon glyphicon-lock"></span> Пароль</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="password" id="password"
+                                   placeholder="Введите пароль" required>
+                            <span class="input-group-btn">
+                                    <button id="showpsw" class="btn btn-default" type="button">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="" checked>Запомнить меня</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Войти
+                        <span class="glyphicon glyphicon-log-in"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">Нет аккаунта? <a href="/registration">Зарегистрироваться.</a></div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">Забыли <a href="#">пароль?</a></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

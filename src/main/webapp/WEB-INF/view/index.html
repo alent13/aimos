@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aimos messages page">
+    <meta name="author" content="applexis">
+
+    <title>Aimos</title>
+    <link rel="shortcut icon" type="image/x-icon" href="@{/img/logo.png}" />
+
+    <link rel="stylesheet" href="@{/css/header.css}">
+    <link rel="stylesheet" href="@{/css/index-extras.css}">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <script src="@{/js/extra.js}"></script>
+
+</head>
+<body>
+
+    <th:block th:if="${authError == true}">
+        <script language="javascript">
+            $(window).load(function () {
+                $("#login_modal").modal();
+            })
+        </script>
+    </th:block>
+
+    <div id="wrapper">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a style="font-size: xx-large" class="navbar-brand headertext menu" href="#">Aimos</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a id="login_modal_btn" href="#"><span class="glyphicon glyphicon-log-in"></span> Логин</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Modal -->
+        <div class="modal fade" id="login_modal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="text-align: center"><span class="glyphicon glyphicon-off"></span> Войти в систему</h4>
+                    </div>
+                    <div class="modal-body" style="padding-left: 50px; padding-right: 50px;">
+                        <form role="form" method="post" action="/login">
+                            <div class="form-group">
+                                <label for="login"><span class="glyphicon glyphicon-user"></span> Логин</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">@</span>
+                                    <input type="text" class="form-control" name="login" id="login" placeholder="Введите логин">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password"><span class="glyphicon glyphicon-lock"></span> Пароль</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" name="password" id="password" placeholder="Не менее 6 символов">
+                                    <span class="input-group-btn">
+                                        <button id="showpsw" class="btn btn-default" type="button">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" value="" checked>Запомнить меня</label>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">
+                                Войти
+                                <span class="glyphicon glyphicon-log-in"></span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <p style="float: left">Нет аккаунта? <a id="reg-modal-btn" data-dismiss="modal" href="#">Зарегистрироваться</a></p>
+                        <p style="float: right">Забыли <a href="#">пароль?</a></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RegModal -->
+        <div class="modal fade" id="registration_modal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="text-align: center"><span class="glyphicon glyphicon-off"></span> Войти в систему</h4>
+                    </div>
+                    <div class="modal-body" style="padding-left: 50px; padding-right: 50px;">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="reg-login"><span class="glyphicon glyphicon-user"></span> Логин</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">@</span>
+                                    <input type="text" class="form-control" id="reg-login" placeholder="Введите логин">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-password"><span class="glyphicon glyphicon-lock"></span> Пароль</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="reg-password" placeholder="Не менее 6 символов">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-password"><span class="glyphicon glyphicon-lock"></span> Подтверждение пароля</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="reg-password-confirm" placeholder="Повторите пароль">
+                                </div>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" value="" checked>Запомнить меня</label>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">
+                                <span class="glyphicon glyphicon-ok"></span> Войти
+                            </button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <p style="float: left">Нет аккаунта? <a href="#">Зарегистрироваться</a></p>
+                        <p style="float: right">Забыли <a href="#">пароль?</a></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
