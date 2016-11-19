@@ -4,6 +4,7 @@ import com.applexis.aimos.model.entity.*;
 import com.applexis.aimos.model.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,45 +49,53 @@ public class RegistrationController {
                            @RequestParam(value = "surname", required = false) String surname,
                            @RequestParam(value = "email", required = false) String email,
                            @RequestParam(value = "phone", required = false) String phone,
-                           @RequestParam(value = "about_me", required = false) String about_me) {
-        User user = new User();
-        user.setLogin(login);
-        user.setPassword(password);
-        if(!Objects.equals(name, "") && name != null) {
-            user.setName(name);
-        }
-        if(!Objects.equals(surname, "") && surname != null) {
-            user.setSurname(surname);
-        }
+                           @RequestParam(value = "about_me", required = false) String about_me,
+                           Model model) {
+        if(userService.getByLogin(login) == null){
+            User user = new User();
+            user.setLogin(login);
+            user.setPassword(password);
+            if(!Objects.equals(name, "") && name != null) {
+                user.setName(name);
+            }
+            if(!Objects.equals(surname, "") && surname != null) {
+                user.setSurname(surname);
+            }
 
-        ShowMode mode = showModeService.fingByMode(ShowMode.CONTACTSONLY);
+            ShowMode modeContactsOnly = showModeService.fingByMode(ShowMode.CONTACTSONLY);
+            ShowMode modeEveryone = showModeService.fingByMode(ShowMode.EVERYONE);
 
-        UserExtraInfo extraInfo = new UserExtraInfo();
-        if(!Objects.equals(email, "") && email != null) {
-            extraInfo.setEmail(email);
+            UserExtraInfo extraInfo = new UserExtraInfo();
+            if(!Objects.equals(email, "") && email != null) {
+                extraInfo.setEmail(email);
+            }
+            if(!Objects.equals(phone, "") && phone != null) {
+                extraInfo.setPhone(phone);
+            }
+            if(!Objects.equals(about_me, "") && about_me != null) {
+                extraInfo.setAbout(about_me);
+            }
+            extraInfo = userExtraInfoService.create(extraInfo);
+            user.setUserExtraInfo(extraInfo);
+
+            Language lang = languageService.findByLang(Language.RU);
+
+            UserSettings settings = new UserSettings();
+            settings.setPageShow(modeEveryone);
+            settings.setEmailShow(modeContactsOnly);
+            settings.setPhoneShow(modeContactsOnly);
+            settings.setAboutMeShow(modeContactsOnly);
+            settings.setLang(lang);
+            settings = userSettingsService.create(settings);
+            user.setUserSettings(settings);
+
+            userService.registrateNewUser(user);
+            return "redirect:/login";
         }
-        if(!Objects.equals(phone, "") && phone != null) {
-            extraInfo.setPhone(phone);
+        else {
+            model.addAttribute("error", "Пользователь с таким логином уже зарегистрирован");
+            return "registration";
         }
-        if(!Objects.equals(about_me, "") && about_me != null) {
-            extraInfo.setAbout(about_me);
-        }
-        extraInfo = userExtraInfoService.create(extraInfo);
-        user.setUserExtraInfo(extraInfo);
-
-        Language lang = languageService.findByLang(Language.RU);
-
-        UserSettings settings = new UserSettings();
-        settings.setPageShow(mode);
-        settings.setEmailShow(mode);
-        settings.setPhoneShow(mode);
-        settings.setAboutMeShow(mode);
-        settings.setLang(lang);
-        settings = userSettingsService.create(settings);
-        user.setUserSettings(settings);
-
-        userService.registrateNewUser(user);
-        return "redirect:/login";
     }
 
 }

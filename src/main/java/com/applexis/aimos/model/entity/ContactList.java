@@ -14,16 +14,17 @@ public class ContactList {
     @Column(name = "id_user")
     private Long userId;
 
-    @Column(name = "id_friend")
-    private Long friendId;
+    @ManyToOne
+    @JoinColumn(name = "id_friend")
+    private User friend;
 
     public ContactList() {
     }
 
-    public ContactList(Long userId, Long friendId) {
+    public ContactList(Long userId, User friend) {
         this();
         this.userId = userId;
-        this.friendId = friendId;
+        this.friend = friend;
     }
 
     public Long getId() {
@@ -42,11 +43,11 @@ public class ContactList {
         this.userId = userId;
     }
 
-    public Long getFriendId() {
-        return friendId;
+    public User getFriend() {
+        return friend;
     }
 
-    public void setFriendId(Long friendId) {
-        this.friendId = friendId;
+    public void setFriend(User friend) {
+        this.friend = friend;
     }
 }

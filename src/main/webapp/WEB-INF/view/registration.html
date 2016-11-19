@@ -35,6 +35,11 @@
                 <div class="panel-body">
                     <div>
                         <div id="login_group" class="form-group">
+                            <div th:if="${error}">
+                                <div th:text="${error}" class="alert alert-danger">
+                                    <strong>Ошибка!</strong>
+                                </div>
+                            </div>
                             <label for="login"><span class="glyphicon glyphicon-user"></span> Логин</label>
                             <div class="input-group">
                                 <span class="input-group-addon">@</span>

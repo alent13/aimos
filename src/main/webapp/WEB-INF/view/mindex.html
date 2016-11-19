@@ -6,6 +6,7 @@
 
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/contact-loader.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/ultimatebg.css}">
@@ -18,7 +19,7 @@
 
 </head>
 <body style="padding-top: 0;" class="wided colorBg colorBgBlue">
-<nav class="navbar navbar-default">
+<nav style="margin-bottom: 0" class="navbar navbar-default">
     <div class="container-fluid">
         <div style="padding: 0; vertical-align: middle" class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
@@ -26,11 +27,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <span class="navbar-left btn glyphicon glyphicon-menu-hamburger"></span>
+            <!--<span class="navbar-left btn glyphicon glyphicon-menu-hamburger"></span>-->
             <a class="headertext" href="#">Aimos</a>
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <button class="btn btn-default btn-lg btn-link dropdown-toggle" data-toggle="dropdown" style="font-size:20px; padding-bottom: 0;">
+                <!--<li>
+                    <button class="btn btn-default btn-lg btn-link dropdown-toggle" data-toggle="dropdown"
+                            style="font-size:20px; padding-bottom: 0;">
                         <span class="glyphicon glyphicon-envelope"></span>
                     </button>
                     <span style="margin: 1px" class="badge badge-notify">3</span>
@@ -40,40 +42,128 @@
                         <li><a href="#">Another action</a></li>
                     </ul>
                 </li>
+                <li>
+                    <button class="btn btn-default btn-lg btn-link dropdown-toggle" data-toggle="dropdown"
+                            style="font-size:20px; padding-bottom: 0;">
+                        <span class="glyphicon glyphicon-bell"></span>
+                    </button>
+                    <span style="margin: 1px" class="badge badge-notify">1</span>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Another action</a></li>
+                    </ul>
+                </li>-->
                 <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Выйти</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid">
-    <div class="row content">
-        <div id="navigation" class="col-sm-2 sidenav sidebar">
-            <p><a href="#">Link</a></p>
-            <p><a href="#">Link</a></p>
-            <p><a href="#">Link</a></p>
-        </div>
-        <div class="col-sm-8 text-left">
-            <h1>Welcome</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-                ut aliquip ex ea commodo consequat.</p>
+<div class="container-fluid fullheight row">
+    <div id="navigation" class="col-sm-2 sidenav sidebar-left fullheight bt-shadow">
+        <ul style="margin-top: 20px" class="nav nav-pills nav-stacked">
+            <li><a href="#">Моя страница</a></li>
+            <li><a href="#">Контакты</a></li>
+            <li class="active"><a href="#">Сообщения</a></li>
             <hr>
-            <h3>Test</h3>
-            <p>Lorem ipsum...</p>
-        </div>
-        <div class="col-sm-2 sidenav sidebar">
-            <div class="well">
-                <p>ADS</p>
-            </div>
-            <div class="well">
-                <p>ADS</p>
-            </div>
-        </div>
+            <li><a href="/logout">Выйти</a></li>
+        </ul>
     </div>
-</div>
+    <div style="padding: 30px;" class="col-sm-8 fullheight bt-shadow">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10 text-left fullheight">
+            <div class="panel panel-primary fullheight">
+                <div class="panel-heading"><span th:text="${login}"></span></div>
+                <div class="panel-body">
+                    <div style="overflow-y: auto" id="dialogs" class="col-sm-4">
+                        <div class="media">
+                            <div class="media-left">
+                                <img th:src="@{/img/default-user-male.png}" class="media-object" style="width:60px">
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Left-aligned</h4>
+                                <p>Lorem ipsum dolor sit amet...</p>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div style="height: 100%" class="col-sm-8">
+                        <div style="overflow-y: scroll;">
+                            <div style="width: 80%" class="media">
+                                <div class="media-left">
+                                    <img th:src="@{/img/default-user-male.png}" class="media-object img-circle" style="width:40px">
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">John Doe</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                            <div style="width: 80%" class="media">
+                                <div class="media-left">
+                                    <img th:src="@{/img/default-user-male.png}" class="media-object img-circle" style="width:40px">
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">John Doe</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                            <div style="width: 80%; float: right" class="media">
+                                <div class="media-body">
+                                    <h4 class="media-heading">John Doe</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                                <div class="media-right">
+                                    <img th:src="@{/img/default-user-male.png}" class="media-object img-circle" style="width:40px">
+                                </div>
+                            </div>
+                            <div style="width: 80%" class="media">
+                                <div class="media-left">
+                                    <img th:src="@{/img/default-user-male.png}" class="media-object img-circle" style="width:40px">
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">John Doe</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: block; height: 400px">
+                                <textarea style="width: 100%; resize: none" class="form-controle" id="message"
+                                          placeholder="Напишите ваше сообщение"></textarea>
+                            <span style="font-family: sans-serif" class="btn btn-primary glyphicon glyphicon-envelope"> Отправить</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+    <div class="col-sm-2 sidenav sidebar-right bt-shadow">
+        <div class="row">
+            <div style="padding: 15px" class="input-group">
+                <input type="text" class="form-control" id="contacts" name="contacts" placeholder="Найти"/>
+                <span class="input-group-btn">
+                        <button id="contact_search_clear" class="btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+            </div>
+            <hr style="margin-top: 4px; margin-bottom: 4px">
+            <div style="overflow-y: scroll" id="contact_list" class="fullheight">
+                <div th:each="contact : ${contacts}" style="padding: 5px;" class="media">
+                    <div class="media-left">
+                        <img style="background-color: dimgray; width: 60px; height: 60px"
+                             th:src="@{img/default-user-male.png}" class="media-object img-circle">
+                    </div>
+                    <div class="media-body">
+                        <h4 th:text="${contact.name + ' ' + contact.surname}" class="media-heading"></h4>
+                        <p th:text="${contact.login}"></p>
+                    </div>
+                </div>
+            </div>
+            <div id="search_contact"></div>
+        </div>
+        <div style="height: 1px; background: gray" class="row"></div>
+    </div>
 </body>
 </html>

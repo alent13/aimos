@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -24,13 +26,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getContacts(Long id) {
+    public User getContact(Long id) {
         return repository.findOne(id);
     }
 
     @Override
-    public User getContacts(String login) {
+    public User getContact(String login) {
         return repository.findByLogin(login);
+    }
+
+    @Override
+    public List<User> getContacts(String loginStart) {
+        return repository.findByLoginContaining(loginStart);
     }
 
     @Override

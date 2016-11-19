@@ -1,6 +1,6 @@
-.badge-notify{
-    background:red;
-    position:relative;
+.badge-notify {
+    background: red;
+    position: relative;
     top: -5px;
     left: -33px;
 }
@@ -8,11 +8,37 @@
 .navbar-default {
     background: snow;
     border-radius: 0;
-    -webkit-box-shadow: 0px 4px 9px 0px rgba(0,0,0,0.6);
-    -moz-box-shadow: 0px 4px 9px 0px rgba(0,0,0,0.6);
-    box-shadow: 0px 4px 9px 0px rgba(0,0,0,0.6);
 }
 
-.sidebar {
+.bt-shadow {
+    -webkit-box-shadow: inset 0px 8px 20px -8px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset 0px 8px 20px -8px rgba(0,0,0,0.75);
+    box-shadow: inset 0px 8px 20px -8px rgba(0,0,0,0.75);
+}
+
+.sidebar-left {
+    float: left;
+    height: 100%;
     background: snow;
+}
+
+.sidebar-right {
+    float: right;
+    height: 100%;
+    background: snow;
+}
+
+.content {
+    min-height: 100%;
+}
+
+.fullheight {
+    height: 100%;
+}
+
+html, body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
 }
