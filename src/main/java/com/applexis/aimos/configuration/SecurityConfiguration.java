@@ -36,6 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/img/**", "/fonts/**").permitAll()
                 .antMatchers("/registration").permitAll()
+                .antMatchers("/mobile-api/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/keyexchange").permitAll()
                 .anyRequest().authenticated()
@@ -53,6 +54,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filter, CsrfFilter.class);
         http.csrf().disable();
     }
+
+
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

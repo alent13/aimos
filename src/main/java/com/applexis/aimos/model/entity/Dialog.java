@@ -1,9 +1,12 @@
 package com.applexis.aimos.model.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-@Table(name = "dialog")
+@Table(name = "dialogs")
 public class Dialog {
 
     @Id
@@ -11,23 +14,47 @@ public class Dialog {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "id_dialog_users")
-    private Long dialogUsersId;
-
     @Column(name = "name")
     private String name;
+
+    @Column(name = "active")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean active;
+
+    @Column(name = "public")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean isPublic;
 
     @Column(name = "img")
     private String logoPath;
 
-    public Dialog(){
+    public Dialog() {
     }
 
-    public Dialog(Long dialogUsersId, String name, String logoPath) {
+    public Dialog(String name) {
+        this.name = name;
+        logoPath = "";
+    }
+
+    public Dialog(String name, String logoPath) {
         this();
-        this.dialogUsersId = dialogUsersId;
         this.name = name;
         this.logoPath = logoPath;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean sameSame = false;
+
+        if (obj != null && obj instanceof Dialog) {
+            sameSame = Objects.equals(this.id, ((Dialog) obj).id) &&
+                    Objects.equals(this.name, ((Dialog) obj).name) &&
+                    Objects.equals(this.active, ((Dialog) obj).active) &&
+                    Objects.equals(this.isPublic, ((Dialog) obj).isPublic) &&
+                    Objects.equals(this.logoPath, ((Dialog) obj).logoPath);
+        }
+
+        return sameSame;
     }
 
     public Long getId() {
@@ -38,20 +65,28 @@ public class Dialog {
         this.id = id;
     }
 
-    public Long getDialogUsersId() {
-        return dialogUsersId;
-    }
-
-    public void setDialogUsersId(Long dialogUsersId) {
-        this.dialogUsersId = dialogUsersId;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
     }
 
     public String getLogoPath() {

@@ -1,5 +1,6 @@
 package com.applexis.aimos.model.service;
 
+import com.applexis.aimos.model.ProtectedUser;
 import com.applexis.aimos.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +29,17 @@ public class AuthenticationService implements UserDetailsService {
             return null;
         }
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
-        return new org.springframework.security.core.userdetails.User(user.getLogin(),
-                user.getPassword(), Collections.singletonList(authority));
+        return new ProtectedUser(user.getLogin(),
+                user.getPassword(), Collections.singletonList(authority), user.getToken());
+    }
+
+    public UserDetails loadUserByToken(String token) throws UsernameNotFoundException {
+        User user = userService.getByToken(token);
+        if (user == null) {
+            return null;
+        }
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        return new ProtectedUser(user.getLogin(),
+                user.getPassword(), Collections.singletonList(authority), user.getToken());
     }
 }

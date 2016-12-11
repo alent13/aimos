@@ -15,7 +15,14 @@ public class KeyExchange {
         Key key = DESCryptoHelper.generateKey();
         map.put(publicKey, key);
         PublicKey pk = RSACryptoHelper.getPublicKey(publicKey);
-        return Base64.encodeBase64String(RSACryptoHelper.encrypt(pk, key.getEncoded()));
+        byte[] DESKey = key.getEncoded();
+        byte[] res = new byte[pk.getEncoded().length - 11];
+        System.arraycopy(DESKey, 0, res, 0, DESKey.length);
+        return Base64.encodeBase64String(RSACryptoHelper.encrypt(pk, DESKey));
+    }
+
+    public static Key getKey(String publicKey) {
+        return map.get(publicKey);
     }
 
 }

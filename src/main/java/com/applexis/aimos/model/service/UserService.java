@@ -18,4 +18,5 @@ public interface UserService {
     User update(User user);
 
     User getByLogin(String login);
+    User getByToken(String token);
 }

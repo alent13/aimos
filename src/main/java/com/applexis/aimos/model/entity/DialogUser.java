@@ -3,7 +3,7 @@ package com.applexis.aimos.model.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "dialog_user")
+@Table(name = "dialog_users")
 public class DialogUser {
 
     @Id
@@ -11,22 +11,24 @@ public class DialogUser {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "id_dialog")
-    private Long dialogId;
+    @ManyToOne
+    @JoinColumn(name = "id_dialog")
+    private Dialog dialog;
 
-    @Column(name = "id_user")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "id_status")
     private Status status;
 
     public DialogUser() {
     }
 
-    public DialogUser(Long dialogId, Long userId, Status status) {
-        this.dialogId = dialogId;
-        this.userId = userId;
+    public DialogUser(Dialog dialog, User user, Status status) {
+        this.dialog = dialog;
+        this.user = user;
         this.status = status;
     }
 
@@ -38,20 +40,20 @@ public class DialogUser {
         this.id = id;
     }
 
-    public Long getDialogId() {
-        return dialogId;
+    public Dialog getDialog() {
+        return dialog;
     }
 
-    public void setDialogId(Long dialogId) {
-        this.dialogId = dialogId;
+    public void setDialog(Dialog dialog) {
+        this.dialog = dialog;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Status getStatus() {

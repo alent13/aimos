@@ -16,13 +16,17 @@ import java.security.SecureRandom;
 
 public class DESCryptoHelper {
 
-    public static Key getKeyString(String keyString) {
+    public static Key getKey(String keyString) {
         byte[] encodedKey = Base64.decodeBase64(keyString);
         return new SecretKeySpec(encodedKey, 0, encodedKey.length, "DES");
     }
 
     public static String getKeyString(Key key) {
         return Base64.encodeBase64String(key.getEncoded());
+    }
+
+    public static Key getKey(byte[] keyBytes) {
+        return new SecretKeySpec(keyBytes, "DES");
     }
 
     public static Key generateKey() {

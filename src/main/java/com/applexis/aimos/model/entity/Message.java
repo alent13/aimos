@@ -1,8 +1,7 @@
 package com.applexis.aimos.model.entity;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "messages")
@@ -13,11 +12,13 @@ public class Message {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "id_user")
-    private Long senderId;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User sender;
 
-    @Column(name = "id_dialog")
-    private Long dialogId;
+    @ManyToOne
+    @JoinColumn(name = "id_dialog")
+    private Dialog dialog;
 
     @Column(name = "key")
     private String key;
@@ -25,21 +26,19 @@ public class Message {
     @Column(name = "text")
     private String text;
 
-    @Column(name = "is_readed")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private boolean readed;
+    @Column(name = "datetime", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date datetime;
 
     public Message() {
     }
 
-    public Message(Long senderId, Long dialogId,
-                   String key, String text, boolean readed) {
-        this();
-        this.senderId = senderId;
-        this.dialogId = dialogId;
+    public Message(User sender, Dialog dialog, String key, String text, Date datetime) {
+        this.sender = sender;
+        this.dialog = dialog;
         this.key = key;
         this.text = text;
-        this.readed = readed;
+        this.datetime = datetime;
     }
 
     public Long getId() {
@@ -50,20 +49,20 @@ public class Message {
         this.id = id;
     }
 
-    public Long getSenderId() {
-        return senderId;
+    public User getSender() {
+        return sender;
     }
 
-    public void setSenderId(Long senderId) {
-        this.senderId = senderId;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
-    public Long getDialogId() {
-        return dialogId;
+    public Dialog getDialog() {
+        return dialog;
     }
 
-    public void setDialogId(Long dialogId) {
-        this.dialogId = dialogId;
+    public void setDialog(Dialog dialog) {
+        this.dialog = dialog;
     }
 
     public String getKey() {
@@ -82,11 +81,11 @@ public class Message {
         this.text = text;
     }
 
-    public boolean isReaded() {
-        return readed;
+    public Date getDatetime() {
+        return datetime;
     }
 
-    public void setReaded(boolean readed) {
-        this.readed = readed;
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
     }
 }

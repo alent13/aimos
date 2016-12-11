@@ -1,6 +1,9 @@
 package com.applexis.aimos.model.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "users")
@@ -31,22 +34,39 @@ public class User {
     @JoinColumn(name = "id_user_settings")
     private UserSettings userSettings;
 
+    @Column(name = "active")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean active;
+
     @Column(name = "img")
     private String userLogo;
+
+    @Column(name = "registration_datetime", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date registrationDatetime;
+
+    @Column(name = "last_action_datetime", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastActionDatetime;
 
     public User() {
     }
 
     public User(String login, String name,
                 String surname, String password,
-                UserExtraInfo userExtraInfo, String userLogo) {
-        this();
+                UserExtraInfo userExtraInfo,
+                UserSettings userSettings,
+                boolean active, Date registrationDatetime,
+                Date lastActionDatetime) {
         this.login = login;
         this.name = name;
         this.surname = surname;
         this.password = password;
         this.userExtraInfo = userExtraInfo;
-        this.userLogo = userLogo;
+        this.userSettings = userSettings;
+        this.active = active;
+        this.registrationDatetime = registrationDatetime;
+        this.lastActionDatetime = lastActionDatetime;
     }
 
     public Long getId() {
@@ -111,5 +131,29 @@ public class User {
 
     public void setUserLogo(String userLogo) {
         this.userLogo = userLogo;
+    }
+
+    public Date getRegistrationDatetime() {
+        return registrationDatetime;
+    }
+
+    public void setRegistrationDatetime(Date registrationDatetime) {
+        this.registrationDatetime = registrationDatetime;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Date getLastActionDatetime() {
+        return lastActionDatetime;
+    }
+
+    public void setLastActionDatetime(Date lastActionDatetime) {
+        this.lastActionDatetime = lastActionDatetime;
     }
 }

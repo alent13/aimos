@@ -6,18 +6,21 @@ import javax.persistence.*;
 @Table(name = "status")
 public class Status {
 
+    public static final String ADMIN = "ADMIN";
+    public static final String MEMBER = "MEMBER";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @Column(name = "status")
-    private Long status;
+    private String status;
 
     public Status() {
     }
 
-    public Status(Long status) {
+    public Status(String status) {
         this.status = status;
     }
 
@@ -29,11 +32,11 @@ public class Status {
         this.id = id;
     }
 
-    public Long getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Long status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

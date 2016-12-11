@@ -13,9 +13,9 @@ import java.util.List;
 @Controller
 public class KeyExchangeController {
 
-    @RequestMapping(value = "/keyexchange", method = RequestMethod.GET)
-    public @ResponseBody
-    List<String> generateDESKey(@RequestParam String base64PublicKey) {
+    @RequestMapping(value = "/mobile-api/keyexchange", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> generateDESKey(@RequestParam String base64PublicKey) {
         List<String> key = new ArrayList<>();
         key.add(KeyExchange.generateDESKey(base64PublicKey));
         return key;

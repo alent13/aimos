@@ -24,21 +24,23 @@ public class ContactsController {
     public ContactListService contactListService;
 
     @RequestMapping(value = "/searchContact", method = RequestMethod.POST)
-    public @ResponseBody List<UserMinimalInfo> searchContact(@RequestParam String login, Principal principal) {
+    @ResponseBody
+    public List<UserMinimalInfo> searchContact(@RequestParam String login, Principal principal) {
         List<User> usersLike = userService.getContacts(login);
 
         List<UserMinimalInfo> users = new ArrayList<>();
 
         for (User user : usersLike) {
-            if(user.getUserSettings().getPageShow().getMode().equals(ShowMode.EVERYONE)
-                    && !user.getLogin().equals(principal.getName())){
-                UserMinimalInfo info = new UserMinimalInfo();
-                info.setLogin(user.getLogin());
-                info.setName(user.getName());
-                info.setSurname(user.getSurname());
+            if (user.getUserSettings().getPageShow().getMode().equals(ShowMode.EVERYONE)
+                    && !user.getLogin().equals(principal.getName())) {
+                UserMinimalInfo info = new UserMinimalInfo(
+                        user.getId(),
+                        user.getName(),
+                        user.getSurname(),
+                        user.getLogin()
+                );
                 users.add(info);
-            }
-            else if(user.getUserSettings().getPageShow().getMode().equals(ShowMode.CONTACTSONLY)) {
+            } else if (user.getUserSettings().getPageShow().getMode().equals(ShowMode.CONTACTSONLY)) {
 
             }
         }
@@ -53,6 +55,25 @@ public class ContactsController {
         contactList.setUserId(user.getId());
         contactList.setFriend(friend);
         contactListService.save(contactList);
+    }
+
+    @RequestMapping(value = "/mobile-api/contactList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<UserMinimalInfo> getFriends(@RequestParam String token) {
+        List<UserMinimalInfo> friends = new ArrayList<>();
+
+        Long userId = userService.getByToken(token).getId();
+        List<User> userContacts = contactListService.findFriends(userId);
+        for (User user : userContacts) {
+            UserMinimalInfo info = new UserMinimalInfo(
+                    user.getId(),
+                    user.getName(),
+                    user.getSurname(),
+                    user.getLogin());
+            friends.add(info);
+        }
+
+        return friends;
     }
 
 }
