@@ -6,9 +6,13 @@ import javax.persistence.*;
 @Table(name = "d_notification_type")
 public class NotificationType {
 
-    public static final String ADDED_TO_FRIEND_LIST = "ADDED_TO_FRIEND_LIST";
-    public static final String GET_MESSAGE = "GET_MESSAGE";
-    public static final String INVITED_TO_DIALOG = "INVITED_TO_DIALOG";
+    public enum Type {
+        ADDED_TO_FRIEND_LIST,
+        GET_MESSAGE,
+        INVITED_TO_DIALOG,
+        DIALOG_EXCLUDE,
+        DIALOG_RENAMED
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

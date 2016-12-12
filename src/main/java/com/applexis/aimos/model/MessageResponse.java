@@ -1,49 +1,59 @@
 package com.applexis.aimos.model;
 
-import com.applexis.aimos.model.entity.Message;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MessageResponse {
 
-    private Long id;
-
-    private boolean success;
-
-    private String errorType;
-
-    public MessageResponse() {
-        success = false;
+    public enum ErrorType {
+        BAD_PUBLIC_KEY,
+        INCORRECT_TOKEN,
+        INCORRECT_ID,
+        DATABASE_ERROR
     }
 
-    public MessageResponse(Message message) {
-        if(message != null) {
-            this.id = message.getId();
-            this.success = true;
-        } else {
-            this.success = false;
+    class Message {
+        Long idUserFrom;
+        String eText;
+        String eKey;
+        Date datetime;
+
+        Message(Long idUserFrom, String eText, String eKey, Date datetime) {
+            this.idUserFrom = idUserFrom;
+            this.eText = eText;
+            this.eKey = eKey;
+            this.datetime = datetime;
         }
     }
 
-    public Long getId() {
-        return id;
+    private List<Message> messages;
+
+    public boolean success;
+
+    public String errorType;
+
+    public MessageResponse() {
+        this.success = false;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getErrorType() {
-        return errorType;
-    }
-
-    public void setErrorType(String errorType) {
+    public MessageResponse(String errorType) {
+        this.success = false;
         this.errorType = errorType;
+    }
+
+    public MessageResponse(List<com.applexis.aimos.model.entity.Message> messages) {
+        if (messages != null) {
+            this.messages = new ArrayList<>();
+            for (com.applexis.aimos.model.entity.Message message : messages) {
+                this.messages.add(
+                        new Message(message.getId(),
+                                message.getText(),
+                                message.getKey(),
+                                message.getDatetime())
+                );
+            }
+            this.success = true;
+        }
     }
 }

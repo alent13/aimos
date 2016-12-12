@@ -11,4 +11,6 @@ public interface MessageService {
 
     List<Message> getTop10(Dialog dialog);
 
+    List<Message> getLastMessages(Dialog dialog, int offset, int limit);
+
 }

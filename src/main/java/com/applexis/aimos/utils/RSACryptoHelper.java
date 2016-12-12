@@ -1,4 +1,4 @@
-package com.applexis.aimos.secureutils;
+package com.applexis.aimos.utils;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -40,6 +40,32 @@ public class RSACryptoHelper {
     }
 
     public static byte[] decrypt(PrivateKey key, byte[] ciphertext) {
+        Cipher cipher = null;
+        byte[] decrypted = null;
+        try {
+            cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            decrypted = cipher.doFinal(ciphertext);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return decrypted;
+    }
+
+    public static byte[] encrypt(PrivateKey key, byte[] plaintext) {
+        Cipher cipher = null;
+        byte[] encrypted = null;
+        try {
+            cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            encrypted = cipher.doFinal(plaintext);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return encrypted;
+    }
+
+    public static byte[] decrypt(PublicKey key, byte[] ciphertext) {
         Cipher cipher = null;
         byte[] decrypted = null;
         try {

@@ -5,6 +5,7 @@ import com.applexis.aimos.model.entity.User;
 import java.util.List;
 
 public interface UserService {
+
     User registrateNewUser(User user);
 
     User getContact(Long id);
@@ -18,5 +19,5 @@ public interface UserService {
     User update(User user);
 
     User getByLogin(String login);
-    User getByToken(String token);
+    User getById(Long id);
 }

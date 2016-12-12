@@ -8,6 +8,14 @@ import java.util.List;
 
 public class DialogResponse {
 
+    public enum ErrorType {
+        SUCCESS,
+        INCORRECT_ID,
+        DATABASE_ERROR,
+        BAD_PUBLIC_KEY,
+        INCORRECT_TOKEN
+    }
+
     private Long id;
 
     private String name;
@@ -16,8 +24,19 @@ public class DialogResponse {
 
     private boolean success;
 
+    private String errorType;
+
     public DialogResponse() {
-        success = false;
+        this.success = false;
+    }
+
+    public DialogResponse(String errorType) {
+        if (errorType == DialogResponse.ErrorType.SUCCESS.name()) {
+            this.success = true;
+        } else {
+            this.success = false;
+        }
+        this.errorType = errorType;
     }
 
     public DialogResponse(Dialog dialog, List<User> users) {
@@ -57,5 +76,21 @@ public class DialogResponse {
 
     public void setUsers(List<UserMinimalInfo> users) {
         this.users = users;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(String errorType) {
+        this.errorType = errorType;
     }
 }

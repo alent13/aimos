@@ -1,4 +1,4 @@
-package com.applexis.aimos.secureutils;
+package com.applexis.aimos.utils;
 
 import org.apache.commons.codec.binary.Base64;
 

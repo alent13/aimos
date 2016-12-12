@@ -1,8 +1,15 @@
 package com.applexis.aimos.model;
 
-import com.applexis.aimos.model.entity.User;
+import com.applexis.aimos.model.entity.UserToken;
 
 public class LoginResponse extends UserMinimalInfo {
+
+    public enum ErrorType {
+        USER_ALREADY_EXIST,
+        BAD_PUBLIC_KEY,
+        INCORRECT_PASSWORD,
+        INCORRECT_TOKEN
+    }
 
     private boolean success;
 
@@ -14,13 +21,18 @@ public class LoginResponse extends UserMinimalInfo {
         this.success = false;
     }
 
-    public LoginResponse(User user) {
-        if(user != null) {
+    public LoginResponse(String errorType) {
+        this.success = false;
+        this.errorType = errorType;
+    }
+
+    public LoginResponse(UserToken userToken) {
+        if(userToken != null) {
             success = true;
-            setName(user.getName());
-            setSurname(user.getSurname());
-            setLogin(user.getLogin());
-            this.token = user.getToken();
+            setName(userToken.getUser().getName());
+            setSurname(userToken.getUser().getSurname());
+            setLogin(userToken.getUser().getLogin());
+            this.token = userToken.getToken();
         }
         else {
             success = false;

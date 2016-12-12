@@ -1,24 +1,20 @@
 package com.applexis.aimos.controller;
 
-import com.applexis.aimos.secureutils.KeyExchange;
+import com.applexis.aimos.utils.KeyExchangeHelper;
+import com.applexis.aimos.utils.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 public class KeyExchangeController {
 
-    @RequestMapping(value = "/mobile-api/keyexchange", method = RequestMethod.GET)
+    @RequestMapping(value = "/mobile-api/keyExchange", method = RequestMethod.POST)
     @ResponseBody
-    public List<String> generateDESKey(@RequestParam String base64PublicKey) {
-        List<String> key = new ArrayList<>();
-        key.add(KeyExchange.generateDESKey(base64PublicKey));
-        return key;
+    public String keyExchange(@RequestParam String base64PublicKey) {
+        return StringUtils.surroundQuotes(KeyExchangeHelper.generateDESKey(base64PublicKey));
     }
 
 }

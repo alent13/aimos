@@ -1,10 +1,11 @@
 package com.applexis.aimos.model.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "notifications")
-public class Notifcation {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +28,26 @@ public class Notifcation {
     @JoinColumn(name = "id_user_from")
     private User userFrom;
 
-    public Notifcation() {
+    @Column(name = "datetime", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date datetime;
+
+    public Notification() {
     }
 
-    public Notifcation(User user, NotificationType type, Dialog dialogFrom, User userFrom) {
+    public Notification(User user, NotificationType type, Dialog dialogFrom, User userFrom, Date datetime) {
         this.user = user;
         this.type = type;
         this.dialogFrom = dialogFrom;
         this.userFrom = userFrom;
+        this.datetime = datetime;
+    }
+
+    public Notification(User user, NotificationType type, User userFrom, Date datetime) {
+        this.user = user;
+        this.type = type;
+        this.userFrom = userFrom;
+        this.datetime = datetime;
     }
 
     public Long getId() {
@@ -75,5 +88,13 @@ public class Notifcation {
 
     public void setUserFrom(User userFrom) {
         this.userFrom = userFrom;
+    }
+
+    public Date getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
     }
 }

@@ -3,8 +3,8 @@ package com.applexis.aimos.model.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tokens")
-public class Token {
+@Table(name = "token_user")
+public class UserToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,8 +15,8 @@ public class Token {
     @JoinColumn(name = "id_user")
     private User user;
 
-    @Column(name = "device")
-    private String device;
+    @Column(name = "browser")
+    private String browser;
 
     @Column(name = "os")
     private String os;
@@ -24,12 +24,12 @@ public class Token {
     @Column(name = "token")
     private String token;
 
-    public Token() {
+    public UserToken() {
     }
 
-    public Token(User user, String device, String os, String token) {
+    public UserToken(User user, String browser, String os, String token) {
         this.user = user;
-        this.device = device;
+        this.browser = browser;
         this.os = os;
         this.token = token;
     }
@@ -50,12 +50,12 @@ public class Token {
         this.user = user;
     }
 
-    public String getDevice() {
-        return device;
+    public String getBrowser() {
+        return browser;
     }
 
-    public void setDevice(String device) {
-        this.device = device;
+    public void setBrowser(String browser) {
+        this.browser = browser;
     }
 
     public String getOs() {
