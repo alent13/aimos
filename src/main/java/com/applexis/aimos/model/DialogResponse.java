@@ -6,7 +6,7 @@ import com.applexis.aimos.model.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DialogResponse {
+public class DialogResponse extends DialogMinimal {
 
     public enum ErrorType {
         SUCCESS,
@@ -15,12 +15,6 @@ public class DialogResponse {
         BAD_PUBLIC_KEY,
         INCORRECT_TOKEN
     }
-
-    private Long id;
-
-    private String name;
-
-    private List<UserMinimalInfo> users;
 
     private boolean success;
 
