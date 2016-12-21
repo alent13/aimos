@@ -20,24 +20,23 @@ public class Message {
     @JoinColumn(name = "id_dialog")
     private Dialog dialog;
 
-    @Column(name = "key")
+    @Column(name = "encrypt_key")
     private String key;
 
-    @Column(name = "text")
-    private String text;
+    @Column(name = "message_text")
+    private String messageText;
 
-    @Column(name = "datetime", columnDefinition="DATETIME")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "datetime")
     private Date datetime;
 
     public Message() {
     }
 
-    public Message(User sender, Dialog dialog, String key, String text, Date datetime) {
+    public Message(User sender, Dialog dialog, String key, String messageText, Date datetime) {
         this.sender = sender;
         this.dialog = dialog;
         this.key = key;
-        this.text = text;
+        this.messageText = messageText;
         this.datetime = datetime;
     }
 
@@ -73,12 +72,12 @@ public class Message {
         this.key = key;
     }
 
-    public String getText() {
-        return text;
+    public String getMessageText() {
+        return messageText;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setMessageText(String messageText) {
+        this.messageText = messageText;
     }
 
     public Date getDatetime() {

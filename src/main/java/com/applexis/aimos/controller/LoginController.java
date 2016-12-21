@@ -8,7 +8,7 @@ import com.applexis.aimos.model.service.UserService;
 import com.applexis.aimos.model.service.UserTokenService;
 import com.applexis.aimos.utils.DESCryptoHelper;
 import com.applexis.aimos.utils.KeyExchangeHelper;
-import com.applexis.aimos.utils.SHAHashHelper;
+import com.applexis.aimos.utils.SHA2Helper;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,14 +25,18 @@ import java.util.UUID;
 @Controller
 public class LoginController {
 
-    @Autowired
-    public UserService userService;
+    public final UserService userService;
+
+    public final UserTokenService userTokenService;
+
+    public final AuthenticationService authService;
 
     @Autowired
-    public UserTokenService userTokenService;
-
-    @Autowired
-    public AuthenticationService authService;
+    public LoginController(UserService userService, UserTokenService userTokenService, AuthenticationService authService) {
+        this.userService = userService;
+        this.userTokenService = userTokenService;
+        this.authService = authService;
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginForm() {
@@ -51,13 +55,13 @@ public class LoginController {
             String dLogin = DESCryptoHelper.decrypt(DESKey, eLogin);
             String dPassword = DESCryptoHelper.decrypt(DESKey, ePassword);
             User user = userService.getByLogin(dLogin);
-            if (new BCryptPasswordEncoder().matches(dPassword, user.getPassword())) {
+            if (user != null && new BCryptPasswordEncoder().matches(dPassword, user.getPassword())) {
                 UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
 
                 UserToken userToken = new UserToken(user,
                         userAgent.getBrowser().getName(),
                         userAgent.getOperatingSystem().getName(),
-                        SHAHashHelper.getSHA512String(UUID.randomUUID().toString(), "token"));
+                        SHA2Helper.getSHA512String(UUID.randomUUID().toString(), "token"));
 
                 userToken = userTokenService.createNewToken(userToken);
 
@@ -81,7 +85,11 @@ public class LoginController {
             String token = DESCryptoHelper.decrypt(DESKey, eToken);
             UserToken userToken = userTokenService.getByToken(token);
             if (userToken != null) {
-                response = new LoginResponse(userToken);
+                if(token.equals(userToken.getToken())) {
+                    response = new LoginResponse(userToken);
+                } else {
+                    response = new LoginResponse(LoginResponse.ErrorType.INCORRECT_TOKEN.name());
+                }
             } else {
                 response = new LoginResponse(LoginResponse.ErrorType.INCORRECT_TOKEN.name());
             }

@@ -23,7 +23,7 @@ public class Dialog {
 
     @Column(name = "public")
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    private boolean isPublic;
+    private Boolean isPublic;
 
     @Column(name = "img")
     private String logoPath;

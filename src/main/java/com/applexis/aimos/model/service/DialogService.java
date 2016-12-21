@@ -16,4 +16,6 @@ public interface DialogService {
 
     Dialog update(Dialog dialog);
 
+    Dialog findByName(String name);
+
 }

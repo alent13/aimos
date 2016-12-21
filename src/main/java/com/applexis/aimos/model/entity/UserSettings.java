@@ -44,6 +44,32 @@ public class UserSettings {
         this.lang = lang;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserSettings)) return false;
+
+        UserSettings that = (UserSettings) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (pageShow != null ? !pageShow.equals(that.pageShow) : that.pageShow != null) return false;
+        if (emailShow != null ? !emailShow.equals(that.emailShow) : that.emailShow != null) return false;
+        if (phoneShow != null ? !phoneShow.equals(that.phoneShow) : that.phoneShow != null) return false;
+        if (aboutMeShow != null ? !aboutMeShow.equals(that.aboutMeShow) : that.aboutMeShow != null) return false;
+        return lang != null ? lang.equals(that.lang) : that.lang == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (pageShow != null ? pageShow.hashCode() : 0);
+        result = 31 * result + (emailShow != null ? emailShow.hashCode() : 0);
+        result = 31 * result + (phoneShow != null ? phoneShow.hashCode() : 0);
+        result = 31 * result + (aboutMeShow != null ? aboutMeShow.hashCode() : 0);
+        result = 31 * result + (lang != null ? lang.hashCode() : 0);
+        return result;
+    }
+
     public Long getId() {
         return id;
     }

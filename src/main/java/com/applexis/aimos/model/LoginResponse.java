@@ -29,6 +29,7 @@ public class LoginResponse extends UserMinimalInfo {
     public LoginResponse(UserToken userToken) {
         if(userToken != null) {
             success = true;
+            setId(userToken.getUser().getId());
             setName(userToken.getUser().getName());
             setSurname(userToken.getUser().getSurname());
             setLogin(userToken.getUser().getLogin());

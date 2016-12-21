@@ -1,16 +1,13 @@
 package com.applexis.aimos.controller;
 
-import com.applexis.aimos.model.MessageResponse;
+import com.applexis.aimos.model.GetMessageResponse;
 import com.applexis.aimos.model.MessageSendResponse;
 import com.applexis.aimos.model.entity.*;
 import com.applexis.aimos.model.service.*;
-import com.applexis.aimos.utils.DESCryptoHelper;
-import com.applexis.aimos.utils.KeyExchangeHelper;
-import com.applexis.aimos.utils.RSACryptoHelper;
-import com.applexis.aimos.utils.SHAHashHelper;
+import com.applexis.aimos.utils.*;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.security.Key;
 import java.security.Principal;
 import java.security.PublicKey;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 @Controller
-public class MessagController {
+public class MessageController {
 
     private final UserService userService;
 
@@ -45,7 +43,7 @@ public class MessagController {
     private final NotificationTypeService notificationTypeService;
 
     @Autowired
-    public MessagController(UserService userService, UserTokenService userTokenService, DialogService dialogService, ContactListService contactListService, MessageService messageService, DialogUserService dialogUserService, NotificationService notificationService, NotificationTypeService notificationTypeService) {
+    public MessageController(UserService userService, UserTokenService userTokenService, DialogService dialogService, ContactListService contactListService, MessageService messageService, DialogUserService dialogUserService, NotificationService notificationService, NotificationTypeService notificationTypeService) {
         this.userService = userService;
         this.userTokenService = userTokenService;
         this.dialogService = dialogService;
@@ -66,13 +64,13 @@ public class MessagController {
 
     @RequestMapping(value = "/mobile-api/getLastMessages", method = RequestMethod.POST)
     @ResponseBody
-    public MessageResponse getLastMessages(@RequestParam String eCount,
-                                           @RequestParam String eOffset,
-                                           @RequestParam String eIdDialog,
-                                           @RequestParam String eToken,
-                                           @RequestParam String base64PublicKey) {
+    public GetMessageResponse getLastMessages(@RequestParam String eCount,
+                                              @RequestParam String eOffset,
+                                              @RequestParam String eIdDialog,
+                                              @RequestParam String eToken,
+                                              @RequestParam String base64PublicKey) {
         Key DESKey = KeyExchangeHelper.getKey(base64PublicKey);
-        MessageResponse response = new MessageResponse();
+        GetMessageResponse response = new GetMessageResponse();
         if (DESKey != null) {
             String token = DESCryptoHelper.decrypt(DESKey, eToken);
             Long idDialog = Long.parseLong(DESCryptoHelper.decrypt(DESKey, eIdDialog));
@@ -82,20 +80,21 @@ public class MessagController {
             if (userToken != null) {
                 Dialog dialog = dialogService.getDialog(idDialog);
                 if (dialog != null && dialogUserService.getDialogByUser(userToken.getUser()).contains(dialog)) {
-                    List<Message> messages = messageService.getLastMessages(dialog, offset, count);
+                    List<Message> messages = messageService.getTop10(dialog);
                     if (messages != null) {
-                        response = new MessageResponse(messages);
+                        Collections.reverse(messages);
+                        response = new GetMessageResponse(messages);
                     } else {
-                        response = new MessageResponse(MessageResponse.ErrorType.DATABASE_ERROR.name());
+                        response = new GetMessageResponse(GetMessageResponse.ErrorType.DATABASE_ERROR.name());
                     }
                 } else {
-                    response = new MessageResponse(MessageResponse.ErrorType.INCORRECT_ID.name());
+                    response = new GetMessageResponse(GetMessageResponse.ErrorType.INCORRECT_ID.name());
                 }
             } else {
-                response = new MessageResponse(MessageResponse.ErrorType.INCORRECT_TOKEN.name());
+                response = new GetMessageResponse(GetMessageResponse.ErrorType.INCORRECT_TOKEN.name());
             }
         } else {
-            response = new MessageResponse(MessageResponse.ErrorType.BAD_PUBLIC_KEY.name());
+            response = new GetMessageResponse(GetMessageResponse.ErrorType.BAD_PUBLIC_KEY.name());
         }
         return response;
     }
@@ -113,22 +112,20 @@ public class MessagController {
         MessageSendResponse response = new MessageSendResponse();
         if (DESKey != null) {
             String token = DESCryptoHelper.decrypt(DESKey, eToken);
-            String messageText = DESCryptoHelper.decrypt(DESKey, eMessage);
-            String key = DESCryptoHelper.decrypt(DESKey, eKey);
-            String eds = DESCryptoHelper.decrypt(DESKey, eEds);
-            String edsPublicKey = DESCryptoHelper.decrypt(DESKey, eEdsPublicKey);
             Long idDialog = Long.parseLong(DESCryptoHelper.decrypt(DESKey, eIdDialog));
             UserToken userToken = userTokenService.getByToken(token);
             if (userToken != null) {
                 Dialog dialog = dialogService.getDialog(idDialog);
                 if (dialog != null && dialogUserService.getDialogByUser(userToken.getUser()).contains(dialog)) {
-                    PublicKey edsPublic = RSACryptoHelper.getPublicKey(edsPublicKey);
-                    String messageHash = Hex.encodeHexString(RSACryptoHelper.decrypt(edsPublic, Base64.decode(eds.getBytes())));
-                    String calculatedHash = SHAHashHelper.getSHA512String(messageText, "message");
+                    String key = DESCryptoHelper.decrypt(DESKey, eKey);
+                    byte[] edsBytes = Base64.decodeBase64(eEds.getBytes());
+                    String edsPublicKeyString = DESCryptoHelper.decrypt(DESKey, eEdsPublicKey);
+                    PublicKey edsPublicKey = DSACryptoHelper.getPublicKey(edsPublicKeyString);
+                    boolean isMessageCorrect = DSACryptoHelper.verifySignature(edsPublicKey, eMessage.getBytes(), edsBytes);
                     Message message = null;
-                    if (Objects.equals(messageHash, calculatedHash)) {
+                    if (isMessageCorrect) {
                         message = new Message(userToken.getUser(),
-                                dialog, key, messageText, new Date());
+                                dialog, key, eMessage, new Date());
                         message = messageService.sendMessage(message);
                         if (message != null) {
                             List<User> users = dialogUserService.getUserByDialog(dialog);
@@ -186,8 +183,8 @@ public class MessagController {
                 Dialog dialog = dialogService.getDialog(idDialog);
                 if (dialog != null && dialogUserService.getDialogByUser(userToken.getUser()).contains(dialog)) {
                     PublicKey edsPublic = RSACryptoHelper.getPublicKey(edsPublicKey);
-                    String messageHash = Hex.encodeHexString(RSACryptoHelper.decrypt(edsPublic, Base64.decode(eds.getBytes())));
-                    String calculatedHash = SHAHashHelper.getSHA512String(messageText, "message");
+                    String messageHash = Hex.encodeHexString(RSACryptoHelper.decrypt(edsPublic, Base64.decodeBase64(eds.getBytes())));
+                    String calculatedHash = SHA2Helper.getSHA512String(messageText, "message");
                     Message message = null;
                     if (Objects.equals(messageHash, calculatedHash)) {
                         message = new Message(userToken.getUser(),

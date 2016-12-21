@@ -4,7 +4,7 @@ import org.apache.commons.codec.binary.Hex;
 
 import java.security.MessageDigest;
 
-public class SHAHashHelper {
+public class SHA2Helper {
 
     public static byte[] getSHA512(byte[] data, String salt) {
         MessageDigest md = null;

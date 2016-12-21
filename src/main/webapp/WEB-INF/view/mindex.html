@@ -7,14 +7,14 @@
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/contact-loader.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/bootstrap.min.css}">
 
-    <link rel="stylesheet" type="text/css" th:href="@{/css/ultimatebg.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/modules.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/extras.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/messages-extras.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/ultimatebg.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/modules.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/extras.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/messages-extras.css}">
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/logo.png}"/>
 
 </head>
@@ -72,9 +72,9 @@
     </div>
     <div style="padding: 30px;" class="col-sm-8 fullheight bt-shadow">
         <div class="col-sm-1"></div>
-        <div class="col-sm-10 text-left fullheight">
+        <div class="col-sm-10 messageText-left fullheight">
             <div class="panel panel-primary fullheight">
-                <div class="panel-heading"><span th:text="${login}"></span></div>
+                <div class="panel-heading"><span th:messageText="${login}"></span></div>
                 <div class="panel-body">
                     <div style="overflow-y: auto" id="dialogs" class="col-sm-4">
                         <div class="media">
@@ -141,7 +141,7 @@
     <div class="col-sm-2 sidenav sidebar-right bt-shadow">
         <div class="row">
             <div style="padding: 15px" class="input-group">
-                <input type="text" class="form-control" id="contacts" name="contacts" placeholder="Найти"/>
+                <input type="messageText" class="form-control" id="contacts" name="contacts" placeholder="Найти"/>
                 <span class="input-group-btn">
                         <button id="contact_search_clear" class="btn btn-default" type="button">
                             <span class="glyphicon glyphicon-remove"></span>
@@ -156,8 +156,8 @@
                              th:src="@{img/default-user-male.png}" class="media-object img-circle">
                     </div>
                     <div class="media-body">
-                        <h4 th:text="${contact.name + ' ' + contact.surname}" class="media-heading"></h4>
-                        <p th:text="${contact.login}"></p>
+                        <h4 th:messageText="${contact.name + ' ' + contact.surname}" class="media-heading"></h4>
+                        <p th:messageText="${contact.login}"></p>
                     </div>
                 </div>
             </div>

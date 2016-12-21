@@ -1,6 +1,6 @@
 package com.applexis.aimos.utils;
 
-import org.apache.commons.codec.binary.Base64;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -18,7 +18,20 @@ public class RSACryptoHelper {
         KeyPair pair = null;
         try {
             generator = KeyPairGenerator.getInstance("RSA");
-            generator.initialize(512);
+            generator.initialize(1024);
+            pair = generator.genKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return pair;
+    }
+
+    public static KeyPair generateKeyPair(int keySize) {
+        KeyPairGenerator generator = null;
+        KeyPair pair = null;
+        try {
+            generator = KeyPairGenerator.getInstance("RSA");
+            generator.initialize(keySize);
             pair = generator.genKeyPair();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -81,7 +94,7 @@ public class RSACryptoHelper {
     public static PublicKey getPublicKey(String key) {
         PublicKey publicKey = null;
         try {
-            byte[] byteKey = Base64.decodeBase64(key);
+            byte[] byteKey = Base64.decode(key);
             X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
             KeyFactory kf = KeyFactory.getInstance("RSA");
             publicKey = kf.generatePublic(X509publicKey);
@@ -94,7 +107,7 @@ public class RSACryptoHelper {
     public static PrivateKey getPrivateKey(String key) {
         PrivateKey privateKey = null;
         try {
-            byte[] byteKey = Base64.decodeBase64(key);
+            byte[] byteKey = Base64.decode(key);
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(byteKey);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             privateKey = keyFactory.generatePrivate(keySpec);
@@ -110,7 +123,19 @@ public class RSACryptoHelper {
         String str = null;
         try {
             kf = KeyFactory.getInstance("RSA");
-            str = Base64.encodeBase64String(kf.getKeySpec(key, X509EncodedKeySpec.class).getEncoded());
+            str = Base64.encode(kf.getKeySpec(key, X509EncodedKeySpec.class).getEncoded());
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String getPrivateKeyString(PrivateKey key) {
+        KeyFactory kf = null;
+        String str = null;
+        try {
+            kf = KeyFactory.getInstance("RSA");
+            str = Base64.encode(kf.getKeySpec(key, PKCS8EncodedKeySpec.class).getEncoded());
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }

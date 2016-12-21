@@ -5,7 +5,7 @@ import com.applexis.aimos.model.entity.*;
 import com.applexis.aimos.model.service.*;
 import com.applexis.aimos.utils.DESCryptoHelper;
 import com.applexis.aimos.utils.KeyExchangeHelper;
-import com.applexis.aimos.utils.SHAHashHelper;
+import com.applexis.aimos.utils.SHA2Helper;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -55,15 +55,15 @@ public class RegistrationController {
         return "registration";
     }
 
-    @RequestMapping(value = "/mobile-api/registration", method = RequestMethod.GET)
+    @RequestMapping(value = "/mobile-api/registration", method = RequestMethod.POST)
     @ResponseBody
-    public LoginResponse registration(@RequestParam(value = "login") String eLogin,
-                                         @RequestParam(value = "password") String ePassword,
-                                         @RequestParam(value = "name") String eName,
-                                         @RequestParam(value = "surname") String eSurname,
-                                         @RequestParam(value = "email", required = false) String eEmail,
-                                         @RequestParam(value = "phone", required = false) String ePhone,
-                                         @RequestParam(value = "about_me", required = false) String eAbout,
+    public LoginResponse registration(@RequestParam(value = "eLogin") String eLogin,
+                                         @RequestParam(value = "ePassword") String ePassword,
+                                         @RequestParam(value = "eName") String eName,
+                                         @RequestParam(value = "eSurname") String eSurname,
+                                         @RequestParam(value = "eEmail", required = false) String eEmail,
+                                         @RequestParam(value = "ePhone", required = false) String ePhone,
+                                         @RequestParam(value = "eAbout", required = false) String eAbout,
                                          @RequestParam String base64PublicKey,
                                          HttpServletRequest request) {
         Key DESKey = KeyExchangeHelper.getKey(base64PublicKey);
@@ -81,6 +81,7 @@ public class RegistrationController {
                 user.setPassword(new BCryptPasswordEncoder().encode(password));
                 user.setName(name);
                 user.setSurname(surname);
+                user.setActive(true);
 
                 ShowMode modeContactsOnly = showModeService.fingByMode(ShowMode.CONTACTSONLY);
                 ShowMode modeEveryone = showModeService.fingByMode(ShowMode.EVERYONE);
@@ -116,7 +117,7 @@ public class RegistrationController {
                 UserToken userToken = new UserToken(user,
                         userAgent.getBrowser().getName(),
                         userAgent.getOperatingSystem().getName(),
-                        SHAHashHelper.getSHA512String(UUID.randomUUID().toString(), "token"));
+                        SHA2Helper.getSHA512String(UUID.randomUUID().toString(), "token"));
 
                 userToken = userTokenService.createNewToken(userToken);
 

@@ -26,20 +26,28 @@ import java.util.List;
 @Controller
 public class DialogController {
 
-    @Autowired
-    public UserService userService;
+    public final UserService userService;
+
+    public final DialogService dialogService;
+
+    public final DialogUserService dialogUserService;
+
+    public final StatusRepository statusRepository;
+
+    public final UserTokenService userTokenService;
 
     @Autowired
-    public DialogService dialogService;
-
-    @Autowired
-    public DialogUserService dialogUserService;
-
-    @Autowired
-    public StatusRepository statusRepository;
-
-    @Autowired
-    public UserTokenService userTokenService;
+    public DialogController(UserService userService,
+                            DialogService dialogService,
+                            DialogUserService dialogUserService,
+                            StatusRepository statusRepository,
+                            UserTokenService userTokenService) {
+        this.userService = userService;
+        this.dialogService = dialogService;
+        this.dialogUserService = dialogUserService;
+        this.statusRepository = statusRepository;
+        this.userTokenService = userTokenService;
+    }
 
     @RequestMapping(value = "/mobile-api/createGroup", method = RequestMethod.GET)
     @ResponseBody
@@ -77,7 +85,7 @@ public class DialogController {
         return response;
     }
 
-    @RequestMapping(value = "/mobile-api/createDialog", method = RequestMethod.GET)
+    @RequestMapping(value = "/mobile-api/createDialog", method = RequestMethod.POST)
     @ResponseBody
     public DialogResponse createDialog(@RequestParam String eIdUser,
                                        @RequestParam String eToken,
@@ -92,19 +100,30 @@ public class DialogController {
             if (userToken != null) {
                 User user = userService.getById(idUser);
                 if (user != null) {
-                    dialog = new Dialog(user.getName() + " " + user.getSurname());
-                    dialog = dialogService.createDialog(dialog);
-                    if (dialog != null) {
-                        DialogUser dialogUser = new DialogUser(dialog, userToken.getUser(),
-                                statusRepository.findByStatus(Status.ADMIN));
-                        dialogUser = dialogUserService.create(dialogUser);
-                        if (dialogUser != null) {
-                            response = new DialogResponse(dialog, dialogUserService.getUserByDialog(dialog));
+                    dialog = dialogService.findByName(user.getName() + " " + user.getSurname());
+                    if (dialog == null) {
+                        dialog = new Dialog(user.getName() + " " + user.getSurname());
+                        dialog = dialogService.createDialog(dialog);
+                        if (dialog != null) {
+                            DialogUser dialogUser = new DialogUser(dialog, userToken.getUser(),
+                                    statusRepository.findByStatus(Status.ADMIN));
+                            dialogUser = dialogUserService.create(dialogUser);
+                            if(dialogUser == null) {
+                                response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name());
+                            }
+                            dialogUser = new DialogUser(dialog, user,
+                                    statusRepository.findByStatus(Status.MEMBER));
+                            dialogUser = dialogUserService.create(dialogUser);
+                            if (dialogUser != null) {
+                                response = new DialogResponse(dialog, dialogUserService.getUserByDialog(dialog));
+                            } else {
+                                response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name());
+                            }
                         } else {
                             response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name());
                         }
                     } else {
-                        response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name());
+                        response = new DialogResponse(dialog, dialogUserService.getUserByDialog(dialog));
                     }
                 } else {
                     response = new DialogResponse(DialogResponse.ErrorType.INCORRECT_ID.name());
@@ -118,7 +137,7 @@ public class DialogController {
         return response;
     }
 
-    @RequestMapping(value = "/mobile-api/getDialogs", method = RequestMethod.GET)
+    @RequestMapping(value = "/mobile-api/getDialogs", method = RequestMethod.POST)
     @ResponseBody
     public DialogListResponse getDialogs(@RequestParam String eToken,
                                          @RequestParam String base64PublicKey) {

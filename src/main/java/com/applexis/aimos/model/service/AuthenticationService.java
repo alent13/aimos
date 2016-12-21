@@ -31,14 +31,4 @@ public class AuthenticationService implements UserDetailsService {
         return new User(user.getLogin(),
                 user.getPassword(), Collections.singletonList(authority));
     }
-
-    public UserDetails loadUserByToken(String token) throws UsernameNotFoundException {
-        com.applexis.aimos.model.entity.User user = userService.getByToken(token);
-        if (user == null) {
-            return null;
-        }
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
-        return new User(user.getLogin(),
-                user.getPassword(), Collections.singletonList(authority));
-    }
 }

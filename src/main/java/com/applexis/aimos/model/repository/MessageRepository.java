@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
+    List<Message> findByDialog(Dialog dialog);
+
     List<Message> findByDialogOrderByIdDesc(Dialog dialog, Pageable pageable);
 
     List<Message> findFirst10ByDialogOrderByIdDesc(Dialog dialog);

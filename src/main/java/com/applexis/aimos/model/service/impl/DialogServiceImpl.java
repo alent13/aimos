@@ -36,4 +36,9 @@ public class DialogServiceImpl implements DialogService {
     public Dialog update(Dialog dialog) {
         return repository.save(dialog);
     }
+
+    @Override
+    public Dialog findByName(String name) {
+        return repository.findByName(name);
+    }
 }

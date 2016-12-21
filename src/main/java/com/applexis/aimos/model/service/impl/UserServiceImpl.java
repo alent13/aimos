@@ -4,7 +4,6 @@ import com.applexis.aimos.model.entity.User;
 import com.applexis.aimos.model.repository.UserRepository;
 import com.applexis.aimos.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +20,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registrateNewUser(User user) {
-        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         return repository.save(user);
     }
 

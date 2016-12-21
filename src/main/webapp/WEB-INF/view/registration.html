@@ -6,13 +6,13 @@
 
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/bootstrap.min.css}">
 
-    <link rel="stylesheet" type="text/css" th:href="@{/css/ultimatebg.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/extras.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/modules.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/nautilus.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/ultimatebg.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/extras.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/modules.css}">
+    <link rel="stylesheet" type="messageText/css" th:href="@{/css/nautilus.css}">
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/logo.png}"/>
 
     <script th:src="@{/js/registration.js}"></script>
@@ -24,7 +24,7 @@
     <div class="container">
         <div class="module-container panel-group animated fadeInUp">
             <div class="panel panel-primary">
-                <div style="text-align: center;" class="panel-heading">
+                <div style="messageText-align: center;" class="panel-heading">
                     <button type="button" class="close" style="float: left" onclick="history.back()">
                         <span class="glyphicon glyphicon-chevron-left"></span>
                     </button>
@@ -36,14 +36,14 @@
                     <div>
                         <div id="login_group" class="form-group">
                             <div th:if="${error}">
-                                <div th:text="${error}" class="alert alert-danger">
+                                <div th:messageText="${error}" class="alert alert-danger">
                                     <strong>Ошибка!</strong>
                                 </div>
                             </div>
                             <label for="login"><span class="glyphicon glyphicon-user"></span> Логин</label>
                             <div class="input-group">
                                 <span class="input-group-addon">@</span>
-                                <input type="text" class="form-control" name="login" id="login"
+                                <input type="messageText" class="form-control" name="login" id="login"
                                        placeholder="Введите логин" data-toggle="tooltip" required>
                             </div>
                         </div>
@@ -79,19 +79,19 @@
                     <div>
                         <div class="form-group">
                             <label for="name">Имя</label>
-                            <input type="text" name="name" id="name" class="form-control input-sm"
+                            <input type="messageText" name="name" id="name" class="form-control input-sm"
                                    placeholder="Ваше имя">
                         </div>
                     </div>
                     <div>
                         <div class="form-group">
                             <label for="surname">Фамилия</label>
-                            <input type="text" name="surname" id="surname" class="form-control input-sm"
+                            <input type="messageText" name="surname" id="surname" class="form-control input-sm"
                                    placeholder="Ваша фамилия">
                         </div>
                     </div>
                 </div>
-                <div style="text-align: center; border-radius: 0" class="panel-heading">
+                <div style="messageText-align: center; border-radius: 0" class="panel-heading">
                     <h4 class="panel-title">
                         <a href="#extra_collapse" data-toggle="collapse">
                             Дополнительно
@@ -108,7 +108,7 @@
 
                         <div class="form-group">
                             <label for="phone"><span class="glyphicon glyphicon-earphone"></span> Телефон</label>
-                            <input type="text" name="phone" id="phone" class="form-control input-sm"
+                            <input type="messageText" name="phone" id="phone" class="form-control input-sm"
                                    placeholder="Введите телефон">
                         </div>
 

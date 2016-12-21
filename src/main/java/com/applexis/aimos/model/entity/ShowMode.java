@@ -21,6 +21,24 @@ public class ShowMode {
     public ShowMode() {
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ShowMode)) return false;
+
+        ShowMode showMode = (ShowMode) o;
+
+        if (id != null ? !id.equals(showMode.id) : showMode.id != null) return false;
+        return mode != null ? mode.equals(showMode.mode) : showMode.mode == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (mode != null ? mode.hashCode() : 0);
+        return result;
+    }
+
     public ShowMode(String mode) {
         this.mode = mode;
     }

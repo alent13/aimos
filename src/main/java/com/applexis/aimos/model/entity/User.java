@@ -36,7 +36,7 @@ public class User {
 
     @Column(name = "active")
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    private boolean active;
+    private Boolean active;
 
     @Column(name = "img")
     private String userLogo;
@@ -67,6 +67,44 @@ public class User {
         this.active = active;
         this.registrationDatetime = registrationDatetime;
         this.lastActionDatetime = lastActionDatetime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (login != null ? !login.equals(user.login) : user.login != null) return false;
+        if (name != null ? !name.equals(user.name) : user.name != null) return false;
+        if (surname != null ? !surname.equals(user.surname) : user.surname != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (userExtraInfo != null ? !userExtraInfo.equals(user.userExtraInfo) : user.userExtraInfo != null)
+            return false;
+        if (userSettings != null ? !userSettings.equals(user.userSettings) : user.userSettings != null) return false;
+        if (active != null ? !active.equals(user.active) : user.active != null) return false;
+        if (userLogo != null ? !userLogo.equals(user.userLogo) : user.userLogo != null) return false;
+        if (registrationDatetime != null ? !registrationDatetime.equals(user.registrationDatetime) : user.registrationDatetime != null)
+            return false;
+        return lastActionDatetime != null ? lastActionDatetime.equals(user.lastActionDatetime) : user.lastActionDatetime == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (userExtraInfo != null ? userExtraInfo.hashCode() : 0);
+        result = 31 * result + (userSettings != null ? userSettings.hashCode() : 0);
+        result = 31 * result + (active != null ? active.hashCode() : 0);
+        result = 31 * result + (userLogo != null ? userLogo.hashCode() : 0);
+        result = 31 * result + (registrationDatetime != null ? registrationDatetime.hashCode() : 0);
+        result = 31 * result + (lastActionDatetime != null ? lastActionDatetime.hashCode() : 0);
+        return result;
     }
 
     public Long getId() {
