@@ -3,7 +3,7 @@ package com.applexis.aimos.model.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "status")
+@Table(name = "d_status")
 public class Status {
 
     public static final String ADMIN = "ADMIN";

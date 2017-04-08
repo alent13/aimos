@@ -24,6 +24,9 @@ public class LoginLog {
     @Column(name = "data_time")
     private Timestamp datetime;
 
+    @Column(name = "description")
+    private String description;
+
     public LoginLog() {
     }
 

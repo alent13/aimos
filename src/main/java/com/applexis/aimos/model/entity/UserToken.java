@@ -15,8 +15,8 @@ public class UserToken {
     @JoinColumn(name = "id_user")
     private User user;
 
-    @Column(name = "browser")
-    private String browser;
+    @Column(name = "device")
+    private String device;
 
     @Column(name = "os")
     private String os;
@@ -27,9 +27,9 @@ public class UserToken {
     public UserToken() {
     }
 
-    public UserToken(User user, String browser, String os, String token) {
+    public UserToken(User user, String device, String os, String token) {
         this.user = user;
-        this.browser = browser;
+        this.device = device;
         this.os = os;
         this.token = token;
     }
@@ -50,12 +50,12 @@ public class UserToken {
         this.user = user;
     }
 
-    public String getBrowser() {
-        return browser;
+    public String getDevice() {
+        return device;
     }
 
-    public void setBrowser(String browser) {
-        this.browser = browser;
+    public void setDevice(String device) {
+        this.device = device;
     }
 
     public String getOs() {

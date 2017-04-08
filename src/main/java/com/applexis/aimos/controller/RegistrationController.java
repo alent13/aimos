@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -35,19 +36,23 @@ public class RegistrationController {
 
     private final LanguageService languageService;
 
+    private final PlanService planService;
+
     @Autowired
     public RegistrationController(UserService userService,
                                   UserExtraInfoService userExtraInfoService,
                                   UserSettingsService userSettingsService,
                                   UserTokenService userTokenService,
                                   ShowModeService showModeService,
-                                  LanguageService languageService) {
+                                  LanguageService languageService,
+                                  PlanService planService) {
         this.userService = userService;
         this.userExtraInfoService = userExtraInfoService;
         this.userSettingsService = userSettingsService;
         this.userTokenService = userTokenService;
         this.showModeService = showModeService;
         this.languageService = languageService;
+        this.planService = planService;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -81,6 +86,7 @@ public class RegistrationController {
                 user.setPassword(new BCryptPasswordEncoder().encode(password));
                 user.setName(name);
                 user.setSurname(surname);
+                user.setLastActionDatetime(new Date());
                 user.setActive(true);
 
                 ShowMode modeContactsOnly = showModeService.fingByMode(ShowMode.CONTACTSONLY);
@@ -109,6 +115,8 @@ public class RegistrationController {
                 settings.setLang(lang);
                 settings = userSettingsService.create(settings);
                 user.setUserSettings(settings);
+
+                user.setPlan(planService.getPlans().get(0));
 
                 user = userService.registrateNewUser(user);
 

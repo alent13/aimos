@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "notifications")
+@Table(name = "notification_stack")
 public class Notification {
 
     @Id

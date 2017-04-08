@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="hibernate" name="Hibernate">
-      <configuration>
-        <datasource-map />
-        <naming-strategy-map />
-      </configuration>
-    </facet>
-    <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/java/com/applexis/aimos/configuration/AimosWebAppConfiguration.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/applexis/aimos/configuration/DatabaseConfiguration.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/applexis/aimos/configuration/SecurityConfiguration.java</file>
-        </fileset>
-      </configuration>
-    </facet>
     <facet type="web" name="Web">
       <configuration>
         <webroots>

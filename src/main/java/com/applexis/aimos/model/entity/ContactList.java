@@ -18,13 +18,21 @@ public class ContactList {
     @JoinColumn(name = "id_friend")
     private User friend;
 
+    @Column(name = "relationship")
+    private String relationship;
+
     public ContactList() {
     }
 
     public ContactList(Long userId, User friend) {
-        this();
+        this.userId = userId;
+        this.friend = friend;;
+    }
+
+    public ContactList(Long userId, User friend, String relationship) {
         this.userId = userId;
         this.friend = friend;
+        this.relationship = relationship;
     }
 
     public Long getId() {
@@ -49,5 +57,13 @@ public class ContactList {
 
     public void setFriend(User friend) {
         this.friend = friend;
+    }
+
+    public String getRelationship() {
+        return relationship;
+    }
+
+    public void setRelationship(String relationship) {
+        this.relationship = relationship;
     }
 }

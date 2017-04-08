@@ -49,15 +49,17 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastActionDatetime;
 
+    @ManyToOne
+    @JoinColumn(name = "id_plan")
+    private Plan plan;
+
     public User() {
     }
 
-    public User(String login, String name,
-                String surname, String password,
-                UserExtraInfo userExtraInfo,
-                UserSettings userSettings,
-                boolean active, Date registrationDatetime,
-                Date lastActionDatetime) {
+    public User(String login, String name, String surname, String password,
+                UserExtraInfo userExtraInfo, UserSettings userSettings,
+                Boolean active, String userLogo, Date registrationDatetime,
+                Date lastActionDatetime, Plan plan) {
         this.login = login;
         this.name = name;
         this.surname = surname;
@@ -65,8 +67,10 @@ public class User {
         this.userExtraInfo = userExtraInfo;
         this.userSettings = userSettings;
         this.active = active;
+        this.userLogo = userLogo;
         this.registrationDatetime = registrationDatetime;
         this.lastActionDatetime = lastActionDatetime;
+        this.plan = plan;
     }
 
     @Override
@@ -163,6 +167,14 @@ public class User {
         this.userSettings = userSettings;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public String getUserLogo() {
         return userLogo;
     }
@@ -179,19 +191,19 @@ public class User {
         this.registrationDatetime = registrationDatetime;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public Date getLastActionDatetime() {
         return lastActionDatetime;
     }
 
     public void setLastActionDatetime(Date lastActionDatetime) {
         this.lastActionDatetime = lastActionDatetime;
+    }
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
     }
 }

@@ -128,22 +128,7 @@ public class MessageController {
                                 dialog, key, eMessage, new Date());
                         message = messageService.sendMessage(message);
                         if (message != null) {
-                            List<User> users = dialogUserService.getUserByDialog(dialog);
-                            NotificationType type = notificationTypeService.fingByType(NotificationType.Type.GET_MESSAGE.name());
-
-                            Notification notification = null;
-                            for (User user : users) {
-                                notification = new Notification(user, type, dialog, userToken.getUser(), new Date());
-                                notification = notificationService.create(notification);
-                                if (notification == null) {
-                                    response = new MessageSendResponse(MessageSendResponse.ErrorType.DATABASE_ERROR.name());
-                                    break;
-                                }
-                            }
-
-                            if (notification != null) {
-                                response = new MessageSendResponse(message);
-                            }
+                            response = getMessageSendResponse(response, userToken, dialog, message);
                         } else {
                             response = new MessageSendResponse(MessageSendResponse.ErrorType.DATABASE_ERROR.name());
                         }
@@ -158,6 +143,26 @@ public class MessageController {
             }
         } else {
             response = new MessageSendResponse(MessageSendResponse.ErrorType.BAD_PUBLIC_KEY.name());
+        }
+        return response;
+    }
+
+    private MessageSendResponse getMessageSendResponse(MessageSendResponse response, UserToken userToken, Dialog dialog, Message message) {
+        List<User> users = dialogUserService.getUserByDialog(dialog);
+        NotificationType type = notificationTypeService.fingByType(NotificationType.Type.GET_MESSAGE.name());
+
+        Notification notification = null;
+        for (User user : users) {
+            notification = new Notification(user, type, dialog, userToken.getUser(), new Date());
+            notification = notificationService.create(notification);
+            if (notification == null) {
+                response = new MessageSendResponse(MessageSendResponse.ErrorType.DATABASE_ERROR.name());
+                break;
+            }
+        }
+
+        if (notification != null) {
+            response = new MessageSendResponse(message);
         }
         return response;
     }
@@ -191,22 +196,7 @@ public class MessageController {
                                 dialog, "", messageText, new Date());
                         message = messageService.sendMessage(message);
                         if (message != null) {
-                            List<User> users = dialogUserService.getUserByDialog(dialog);
-                            NotificationType type = notificationTypeService.fingByType(NotificationType.Type.GET_MESSAGE.name());
-
-                            Notification notification = null;
-                            for (User user : users) {
-                                notification = new Notification(user, type, dialog, userToken.getUser(), new Date());
-                                notification = notificationService.create(notification);
-                                if (notification == null) {
-                                    response = new MessageSendResponse(MessageSendResponse.ErrorType.DATABASE_ERROR.name());
-                                    break;
-                                }
-                            }
-
-                            if (notification != null) {
-                                response = new MessageSendResponse(message);
-                            }
+                            response = getMessageSendResponse(response, userToken, dialog, message);
                         } else {
                             response = new MessageSendResponse(MessageSendResponse.ErrorType.DATABASE_ERROR.name());
                         }
