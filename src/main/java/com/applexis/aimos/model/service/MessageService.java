@@ -13,4 +13,6 @@ public interface MessageService {
 
     List<Message> getLastMessages(Dialog dialog, int offset, int limit);
 
+    Message lastMessageInDialog(Dialog dialog);
+
 }

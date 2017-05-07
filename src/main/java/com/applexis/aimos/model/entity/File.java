@@ -38,18 +38,22 @@ public class File {
     @JoinColumn(name = "id_access_mode")
     private AccessMode accessMode;
 
+    @Column(name = "hash_code")
+    private String hash;
+
     public File() {
     }
 
     public File(String path, Long size, Date addDatetime,
                 Date lastModifiedDatetime, User user,
-                AccessMode accessMode) {
+                AccessMode accessMode, String hash) {
         this.path = path;
         this.size = size;
         this.addDatetime = addDatetime;
         this.lastModifiedDatetime = lastModifiedDatetime;
         this.user = user;
         this.accessMode = accessMode;
+        this.hash = hash;
     }
 
     public Long getId() {

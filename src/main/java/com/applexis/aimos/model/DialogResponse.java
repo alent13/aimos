@@ -2,12 +2,12 @@ package com.applexis.aimos.model;
 
 import com.applexis.aimos.model.entity.Dialog;
 import com.applexis.aimos.model.entity.User;
+import com.applexis.utils.crypto.AESCrypto;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DialogResponse extends DialogMinimal {
+public class DialogResponse extends ResponseBase {
 
     public enum ErrorType {
         SUCCESS,
@@ -17,80 +17,34 @@ public class DialogResponse extends DialogMinimal {
         INCORRECT_TOKEN
     }
 
-    private boolean success;
+    DialogMinimal dialog;
 
-    private String errorType;
-
-    public DialogResponse() {
-        this.success = false;
+    public DialogResponse(AESCrypto aes) {
+        super(aes);
     }
 
-    public DialogResponse(String errorType) {
-        if (errorType == DialogResponse.ErrorType.SUCCESS.name()) {
-            this.success = true;
-        } else {
-            this.success = false;
-        }
-        this.errorType = errorType;
+    public DialogResponse(String errorType, AESCrypto aes) {
+        super(errorType, aes);
     }
 
-    public DialogResponse(Dialog dialog, List<User> users, Key DESKey) {
-        this.id = dialog.getId();
-        this.name = dialog.getName();
-        this.users = new ArrayList<>();
-        this.success = true;
-        for (User u : users) {
-            this.users.add(new UserMinimalInfo(u));
-        }
-    }
-
-    public DialogResponse(Dialog dialog, List<User> users) {
-        this.id = dialog.getId();
-        this.name = dialog.getName();
-        this.users = new ArrayList<>();
-        this.success = true;
+    public DialogResponse(Dialog dialog, List<User> users, AESCrypto aes) {
+        this.dialog = new DialogMinimal();
+        this.dialog.setId(dialog.getId(), aes);
+        this.dialog.setName(dialog.getName(), aes);
+        this.dialog.setUsers(new ArrayList<>());
+        this.success = aes.encrypt(String.valueOf(true));
+        List<UserMinimalInfo> infoList = new ArrayList<>();
         for (User user : users) {
-            this.users.add(new UserMinimalInfo(user));
+            infoList.add(new UserMinimalInfo(user, aes));
         }
+        this.dialog.setUsers(infoList);
     }
 
-    public Long getId() {
-        return id;
+    public DialogMinimal getDialog() {
+        return dialog;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<UserMinimalInfo> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<UserMinimalInfo> users) {
-        this.users = users;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getErrorType() {
-        return errorType;
-    }
-
-    public void setErrorType(String errorType) {
-        this.errorType = errorType;
+    public void setDialog(DialogMinimal dialog) {
+        this.dialog = dialog;
     }
 }

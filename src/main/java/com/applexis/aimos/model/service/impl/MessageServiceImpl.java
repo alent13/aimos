@@ -35,4 +35,9 @@ public class MessageServiceImpl implements MessageService {
         }
         return repository.findByDialogOrderByIdDesc(dialog, (Pageable) new PageRequest(page, limit));
     }
+
+    @Override
+    public Message lastMessageInDialog(Dialog dialog) {
+        return repository.findFirstByDialogOrderByDatetimeDesc(dialog);
+    }
 }

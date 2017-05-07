@@ -34,6 +34,8 @@ public class Dialog {
     public Dialog(String name) {
         this.name = name;
         logoPath = "";
+        isPublic = false;
+        active = true;
     }
 
     public Dialog(String name, String logoPath) {

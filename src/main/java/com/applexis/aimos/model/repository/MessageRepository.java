@@ -15,4 +15,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findFirst10ByDialogOrderByIdDesc(Dialog dialog);
 
+    Message findFirstByDialogOrderByDatetimeDesc(Dialog dialog);
+
 }

@@ -1,51 +1,50 @@
 package com.applexis.aimos.model;
 
 import com.applexis.aimos.model.entity.UserToken;
+import com.applexis.utils.crypto.AESCrypto;
 
-public class LoginResponse extends UserMinimalInfo {
+public class LoginResponse extends ResponseBase {
 
     public enum ErrorType {
-        USER_ALREADY_EXIST,
         BAD_PUBLIC_KEY,
+        USER_ALREADY_EXIST,
         INCORRECT_PASSWORD,
         INCORRECT_TOKEN
     }
 
-    private boolean success;
-
-    private String errorType;
+    private UserMinimalInfo userMinimalInfo;
 
     private String token;
 
-    public LoginResponse() {
-        this.success = false;
+    public LoginResponse(AESCrypto aes) {
+        super(aes);
     }
 
-    public LoginResponse(String errorType) {
-        this.success = false;
-        this.errorType = errorType;
+    public LoginResponse(String errorType, AESCrypto aes) {
+        super(errorType, aes);
     }
 
-    public LoginResponse(UserToken userToken) {
+    public LoginResponse(UserToken userToken, AESCrypto aes) {
         if(userToken != null) {
-            success = true;
-            setId(userToken.getUser().getId());
-            setName(userToken.getUser().getName());
-            setSurname(userToken.getUser().getSurname());
-            setLogin(userToken.getUser().getLogin());
-            this.token = userToken.getToken();
+            success = aes.encrypt(String.valueOf(true));
+            userMinimalInfo = new UserMinimalInfo();
+            userMinimalInfo.setId(userToken.getUser().getId(), aes);
+            userMinimalInfo.setName(userToken.getUser().getName(), aes);
+            userMinimalInfo.setSurname(userToken.getUser().getSurname(), aes);
+            userMinimalInfo.setLogin(userToken.getUser().getLogin(), aes);
+            this.token = aes.encrypt(userToken.getToken());
         }
         else {
-            success = false;
+            success = aes.encrypt(String.valueOf(false));
         }
     }
 
-    public boolean isSuccess() {
-        return success;
+    public String getToken(AESCrypto aes) {
+        return aes.decrypt(token);
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setToken(String token, AESCrypto aes) {
+        this.token = aes.encrypt(token);
     }
 
     public String getToken() {
@@ -56,11 +55,11 @@ public class LoginResponse extends UserMinimalInfo {
         this.token = token;
     }
 
-    public String getErrorType() {
-        return errorType;
+    public UserMinimalInfo getUserMinimalInfo() {
+        return userMinimalInfo;
     }
 
-    public void setErrorType(String errorType) {
-        this.errorType = errorType;
+    public void setUserMinimalInfo(UserMinimalInfo userMinimalInfo) {
+        this.userMinimalInfo = userMinimalInfo;
     }
 }

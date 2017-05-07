@@ -1,6 +1,8 @@
 package com.applexis.aimos.model;
 
-public class AddContactResponse {
+import com.applexis.utils.crypto.AESCrypto;
+
+public class AddContactResponse extends ResponseBase {
 
     public enum ErrorType {
         BAD_PUBLIC_KEY,
@@ -12,23 +14,18 @@ public class AddContactResponse {
 
     private UserMinimalInfo userMinimalInfo;
 
-    public boolean success;
-
-    public String errorType;
-
-    public AddContactResponse() {
-        this.success = false;
+    public AddContactResponse(AESCrypto aes) {
+        super(aes);
     }
 
-    public AddContactResponse(String errorType) {
-        this.success = false;
-        this.errorType = errorType;
+    public AddContactResponse(String errorType, AESCrypto aes) {
+        super(errorType, aes);
     }
 
-    public AddContactResponse(UserMinimalInfo userMinimalInfo) {
+    public AddContactResponse(UserMinimalInfo userMinimalInfo, AESCrypto aes) {
         if(userMinimalInfo != null) {
             this.userMinimalInfo = userMinimalInfo;
-            this.success = true;
+            this.success = aes.encrypt("true");
         }
     }
 
@@ -38,21 +35,5 @@ public class AddContactResponse {
 
     public void setUserMinimalInfo(UserMinimalInfo userMinimalInfo) {
         this.userMinimalInfo = userMinimalInfo;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getErrorType() {
-        return errorType;
-    }
-
-    public void setErrorType(String errorType) {
-        this.errorType = errorType;
     }
 }

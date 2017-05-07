@@ -1,17 +1,13 @@
 package com.applexis.aimos.controller;
 
-import com.applexis.aimos.model.DialogListResponse;
-import com.applexis.aimos.model.DialogMinimal;
-import com.applexis.aimos.model.DialogResponse;
-import com.applexis.aimos.model.UserMinimalInfo;
+import com.applexis.aimos.model.*;
 import com.applexis.aimos.model.entity.*;
 import com.applexis.aimos.model.repository.StatusRepository;
-import com.applexis.aimos.model.service.DialogService;
-import com.applexis.aimos.model.service.DialogUserService;
-import com.applexis.aimos.model.service.UserService;
-import com.applexis.aimos.model.service.UserTokenService;
-import com.applexis.aimos.utils.DESCryptoHelper;
+import com.applexis.aimos.model.service.*;
 import com.applexis.aimos.utils.KeyExchangeHelper;
+import com.applexis.utils.crypto.AESCrypto;
+import com.applexis.utils.crypto.DSASign;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Key;
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,17 +33,21 @@ public class DialogController {
 
     public final UserTokenService userTokenService;
 
+    public final MessageService messageService;
+
     @Autowired
     public DialogController(UserService userService,
                             DialogService dialogService,
                             DialogUserService dialogUserService,
                             StatusRepository statusRepository,
-                            UserTokenService userTokenService) {
+                            UserTokenService userTokenService,
+                            MessageService messageService) {
         this.userService = userService;
         this.dialogService = dialogService;
         this.dialogUserService = dialogUserService;
         this.statusRepository = statusRepository;
         this.userTokenService = userTokenService;
+        this.messageService = messageService;
     }
 
     @RequestMapping(value = "/mobile-api/createGroup", method = RequestMethod.GET)
@@ -54,11 +55,11 @@ public class DialogController {
     public DialogResponse createGroup(@RequestParam String eDialogName,
                                       @RequestParam String eToken,
                                       @RequestParam String base64PublicKey) {
-        Key DESKey = KeyExchangeHelper.getKey(base64PublicKey);
-        DialogResponse response = new DialogResponse();
-        if (DESKey != null) {
-            String token = DESCryptoHelper.decrypt(DESKey, eToken);
-            String dialogName = DESCryptoHelper.decrypt(DESKey, eDialogName);
+        AESCrypto aes = new AESCrypto(KeyExchangeHelper.getInstance().getKey(base64PublicKey));
+        DialogResponse response;
+        if (aes.getKey() != null) {
+            String token = aes.decrypt(eToken);
+            String dialogName = aes.decrypt(eDialogName);
             UserToken userToken = userTokenService.getByToken(token);
             Dialog dialog = null;
             if (userToken != null) {
@@ -69,18 +70,18 @@ public class DialogController {
                             statusRepository.findByStatus(Status.ADMIN));
                     dialogUser = dialogUserService.create(dialogUser);
                     if (dialogUser != null) {
-                        response = new DialogResponse(dialog, dialogUserService.getUserByDialog(dialog));
+                        response = new DialogResponse(dialog, dialogUserService.getUserByDialog(dialog), aes);
                     } else {
-                        response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name());
+                        response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name(), aes);
                     }
                 } else {
-                    response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name());
+                    response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name(), aes);
                 }
             } else {
-                response = new DialogResponse(DialogResponse.ErrorType.INCORRECT_TOKEN.name());
+                response = new DialogResponse(DialogResponse.ErrorType.INCORRECT_TOKEN.name(), aes);
             }
         } else {
-            response = new DialogResponse(DialogResponse.ErrorType.BAD_PUBLIC_KEY.name());
+            response = new DialogResponse(DialogResponse.ErrorType.BAD_PUBLIC_KEY.name(), aes);
         }
         return response;
     }
@@ -90,11 +91,11 @@ public class DialogController {
     public DialogResponse createDialog(@RequestParam String eIdUser,
                                        @RequestParam String eToken,
                                        @RequestParam String base64PublicKey) {
-        Key DESKey = KeyExchangeHelper.getKey(base64PublicKey);
-        DialogResponse response = new DialogResponse();
-        if (DESKey != null) {
-            String token = DESCryptoHelper.decrypt(DESKey, eToken);
-            Long idUser = Long.parseLong(DESCryptoHelper.decrypt(DESKey, eIdUser));
+        AESCrypto aes = new AESCrypto(KeyExchangeHelper.getInstance().getKey(base64PublicKey));
+        DialogResponse response;
+        if (aes.getKey() != null) {
+            String token = aes.decrypt(eToken);
+            Long idUser = Long.parseLong(aes.decrypt(eIdUser));
             UserToken userToken = userTokenService.getByToken(token);
             Dialog dialog = null;
             if (userToken != null) {
@@ -109,30 +110,30 @@ public class DialogController {
                                     statusRepository.findByStatus(Status.ADMIN));
                             dialogUser = dialogUserService.create(dialogUser);
                             if(dialogUser == null) {
-                                response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name());
+                                response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name(), aes);
                             }
                             dialogUser = new DialogUser(dialog, user,
                                     statusRepository.findByStatus(Status.MEMBER));
                             dialogUser = dialogUserService.create(dialogUser);
                             if (dialogUser != null) {
-                                response = new DialogResponse(dialog, dialogUserService.getUserByDialog(dialog));
+                                response = new DialogResponse(dialog, dialogUserService.getUserByDialog(dialog), aes);
                             } else {
-                                response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name());
+                                response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name(), aes);
                             }
                         } else {
-                            response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name());
+                            response = new DialogResponse(DialogResponse.ErrorType.DATABASE_ERROR.name(), aes);
                         }
                     } else {
-                        response = new DialogResponse(dialog, dialogUserService.getUserByDialog(dialog));
+                        response = new DialogResponse(dialog, dialogUserService.getUserByDialog(dialog), aes);
                     }
                 } else {
-                    response = new DialogResponse(DialogResponse.ErrorType.INCORRECT_ID.name());
+                    response = new DialogResponse(DialogResponse.ErrorType.INCORRECT_ID.name(), aes);
                 }
             } else {
-                response = new DialogResponse(DialogResponse.ErrorType.INCORRECT_TOKEN.name());
+                response = new DialogResponse(DialogResponse.ErrorType.INCORRECT_TOKEN.name(), aes);
             }
         } else {
-            response = new DialogResponse(DialogResponse.ErrorType.BAD_PUBLIC_KEY.name());
+            response = new DialogResponse(DialogResponse.ErrorType.BAD_PUBLIC_KEY.name(), aes);
         }
         return response;
     }
@@ -141,10 +142,10 @@ public class DialogController {
     @ResponseBody
     public DialogListResponse getDialogs(@RequestParam String eToken,
                                          @RequestParam String base64PublicKey) {
-        Key DESKey = KeyExchangeHelper.getKey(base64PublicKey);
-        DialogListResponse response = new DialogListResponse();
-        if (DESKey != null) {
-            String token = DESCryptoHelper.decrypt(DESKey, eToken);
+        AESCrypto aes = new AESCrypto(KeyExchangeHelper.getInstance().getKey(base64PublicKey));
+        DialogListResponse response;
+        if (aes.getKey() != null) {
+            String token = aes.decrypt(eToken);
             UserToken userToken = userTokenService.getByToken(token);
             if (userToken != null) {
                 List<Dialog> dialogList = dialogUserService.getDialogByUser(userToken.getUser());
@@ -152,30 +153,35 @@ public class DialogController {
                     List<DialogMinimal> dialogMinimalList = new ArrayList<>();
                     for (Dialog dialog : dialogList) {
                         DialogMinimal minimal = new DialogMinimal();
-                        minimal.setId(dialog.getId());
-                        minimal.setName(dialog.getName());
+                        minimal.setId(dialog.getId(), aes);
+                        minimal.setName(dialog.getName(), aes);
+                        Message lastMessage = messageService.lastMessageInDialog(dialog);
+                        KeyPair keyPair = DSASign.generateKeyPair();
+                        String signature = Base64.encodeBase64String(DSASign.generateSignature(keyPair.getPrivate(), lastMessage.getMessageText().getBytes()));
+                        minimal.setLastMessage(new MessageMinimal(lastMessage, signature, DSASign.getPublicKeyString(keyPair.getPublic()), aes));
+                        minimal.setLastSender(new UserMinimalInfo(lastMessage.getSender(), aes));
                         List<User> users = dialogUserService.getUserByDialog(dialog);
                         if (users != null) {
                             List<UserMinimalInfo> userMinimalInfoList = new ArrayList<>();
                             for (User user : users) {
-                                userMinimalInfoList.add(new UserMinimalInfo(user));
+                                userMinimalInfoList.add(new UserMinimalInfo(user, aes));
                             }
                             minimal.setUsers(userMinimalInfoList);
                         } else {
-                            response = new DialogListResponse(DialogListResponse.ErrorType.DATABASE_ERROR.name());
+                            response = new DialogListResponse(DialogListResponse.ErrorType.DATABASE_ERROR.name(), aes);
                             break;
                         }
                         dialogMinimalList.add(minimal);
                     }
-                    response = new DialogListResponse(dialogMinimalList);
+                    response = new DialogListResponse(dialogMinimalList, aes);
                 } else {
-                    response = new DialogListResponse(DialogListResponse.ErrorType.DATABASE_ERROR.name());
+                    response = new DialogListResponse(DialogListResponse.ErrorType.DATABASE_ERROR.name(), aes);
                 }
             } else {
-                response = new DialogListResponse(DialogResponse.ErrorType.INCORRECT_TOKEN.name());
+                response = new DialogListResponse(DialogResponse.ErrorType.INCORRECT_TOKEN.name(), aes);
             }
         } else {
-            response = new DialogListResponse(DialogResponse.ErrorType.BAD_PUBLIC_KEY.name());
+            response = new DialogListResponse(DialogResponse.ErrorType.BAD_PUBLIC_KEY.name(), aes);
         }
         return response;
     }

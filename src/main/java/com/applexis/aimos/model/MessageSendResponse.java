@@ -1,8 +1,9 @@
 package com.applexis.aimos.model;
 
 import com.applexis.aimos.model.entity.Message;
+import com.applexis.utils.crypto.AESCrypto;
 
-public class MessageSendResponse {
+public class MessageSendResponse extends ResponseBase {
 
     public enum ErrorType {
         BAD_PUBLIC_KEY,
@@ -12,51 +13,38 @@ public class MessageSendResponse {
         DATABASE_ERROR
     }
 
-    private Long id;
+    private String id;
 
-    private boolean success;
-
-    private String errorType;
-
-    public MessageSendResponse() {
-        success = false;
+    public MessageSendResponse(AESCrypto aes) {
+        super(aes);
     }
 
-    public MessageSendResponse(String errorType) {
-        this.success = false;
-        this.errorType = errorType;
+    public MessageSendResponse(String errorType, AESCrypto aes) {
+        super(errorType, aes);
     }
 
-    public MessageSendResponse(Message message) {
+    public MessageSendResponse(Message message, AESCrypto aes) {
         if (message != null) {
-            this.id = message.getId();
-            this.success = true;
+            this.id = aes.encrypt(String.valueOf(message.getId()));
+            success = aes.encrypt(String.valueOf(true));
         } else {
-            this.success = false;
+            success = aes.encrypt(String.valueOf(false));
         }
     }
 
-    public Long getId() {
+    public Long getId(AESCrypto aes) {
+        return Long.getLong(aes.decrypt(id));
+    }
+
+    public void setId(Long id, AESCrypto aes) {
+        this.id = aes.encrypt(String.valueOf(id));
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getErrorType() {
-        return errorType;
-    }
-
-    public void setErrorType(String errorType) {
-        this.errorType = errorType;
     }
 }

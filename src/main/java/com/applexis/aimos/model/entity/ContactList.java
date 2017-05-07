@@ -26,7 +26,8 @@ public class ContactList {
 
     public ContactList(Long userId, User friend) {
         this.userId = userId;
-        this.friend = friend;;
+        this.friend = friend;
+        this.relationship = "";
     }
 
     public ContactList(Long userId, User friend, String relationship) {

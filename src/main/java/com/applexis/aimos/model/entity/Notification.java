@@ -28,7 +28,7 @@ public class Notification {
     @JoinColumn(name = "id_user_from")
     private User userFrom;
 
-    @Column(name = "datetime", columnDefinition="DATETIME")
+    @Column(name = "notification_datetime", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date datetime;
 

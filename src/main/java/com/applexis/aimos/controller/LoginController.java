@@ -6,9 +6,9 @@ import com.applexis.aimos.model.entity.UserToken;
 import com.applexis.aimos.model.service.AuthenticationService;
 import com.applexis.aimos.model.service.UserService;
 import com.applexis.aimos.model.service.UserTokenService;
-import com.applexis.aimos.utils.DESCryptoHelper;
 import com.applexis.aimos.utils.KeyExchangeHelper;
-import com.applexis.aimos.utils.SHA2Helper;
+import com.applexis.utils.crypto.AESCrypto;
+import com.applexis.utils.crypto.HashHelper;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,11 +49,11 @@ public class LoginController {
                                @RequestParam String ePassword,
                                @RequestParam String base64PublicKey,
                                HttpServletRequest request) {
-        Key DESKey = KeyExchangeHelper.getKey(base64PublicKey);
-        LoginResponse response = new LoginResponse();
-        if (DESKey != null) {
-            String dLogin = DESCryptoHelper.decrypt(DESKey, eLogin);
-            String dPassword = DESCryptoHelper.decrypt(DESKey, ePassword);
+        AESCrypto aes = new AESCrypto(KeyExchangeHelper.getInstance().getKey(base64PublicKey));
+        LoginResponse response;
+        if (aes.getKey() != null) {
+            String dLogin = aes.decrypt(eLogin);
+            String dPassword = aes.decrypt(ePassword);
             User user = userService.getByLogin(dLogin);
             if (user != null && new BCryptPasswordEncoder().matches(dPassword, user.getPassword())) {
                 UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
@@ -61,16 +61,16 @@ public class LoginController {
                 UserToken userToken = new UserToken(user,
                         userAgent.getBrowser().getName(),
                         userAgent.getOperatingSystem().getName(),
-                        SHA2Helper.getSHA512String(UUID.randomUUID().toString(), "token"));
+                        HashHelper.getSHA512String(UUID.randomUUID().toString(), "token"));
 
                 userToken = userTokenService.createNewToken(userToken);
 
-                response = new LoginResponse(userToken);
+                response = new LoginResponse(userToken, aes);
             } else {
-                response = new LoginResponse(LoginResponse.ErrorType.INCORRECT_PASSWORD.name());
+                response = new LoginResponse(LoginResponse.ErrorType.INCORRECT_PASSWORD.name(), aes);
             }
         } else {
-            response = new LoginResponse(LoginResponse.ErrorType.BAD_PUBLIC_KEY.name());
+            response = new LoginResponse(LoginResponse.ErrorType.BAD_PUBLIC_KEY.name(), aes);
         }
         return response;
     }
@@ -79,22 +79,22 @@ public class LoginController {
     @ResponseBody
     public LoginResponse checkToken(@RequestParam String eToken,
                                     @RequestParam String base64PublicKey) {
-        Key DESKey = KeyExchangeHelper.getKey(base64PublicKey);
-        LoginResponse response = new LoginResponse();
-        if (DESKey != null) {
-            String token = DESCryptoHelper.decrypt(DESKey, eToken);
+        AESCrypto aes = new AESCrypto(KeyExchangeHelper.getInstance().getKey(base64PublicKey));
+        LoginResponse response;
+        if (aes.getKey() != null) {
+            String token = aes.decrypt(eToken);
             UserToken userToken = userTokenService.getByToken(token);
             if (userToken != null) {
                 if(token.equals(userToken.getToken())) {
-                    response = new LoginResponse(userToken);
+                    response = new LoginResponse(userToken, aes);
                 } else {
-                    response = new LoginResponse(LoginResponse.ErrorType.INCORRECT_TOKEN.name());
+                    response = new LoginResponse(LoginResponse.ErrorType.INCORRECT_TOKEN.name(), aes);
                 }
             } else {
-                response = new LoginResponse(LoginResponse.ErrorType.INCORRECT_TOKEN.name());
+                response = new LoginResponse(LoginResponse.ErrorType.INCORRECT_TOKEN.name(), aes);
             }
         } else {
-            response = new LoginResponse(LoginResponse.ErrorType.BAD_PUBLIC_KEY.name());
+            response = new LoginResponse(LoginResponse.ErrorType.BAD_PUBLIC_KEY.name(), aes);
         }
         return response;
     }

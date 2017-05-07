@@ -5,8 +5,8 @@ import com.applexis.aimos.model.entity.Notification;
 import com.applexis.aimos.model.entity.UserToken;
 import com.applexis.aimos.model.service.NotificationService;
 import com.applexis.aimos.model.service.UserTokenService;
-import com.applexis.aimos.utils.DESCryptoHelper;
 import com.applexis.aimos.utils.KeyExchangeHelper;
+import com.applexis.utils.crypto.AESCrypto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,23 +32,23 @@ public class NotificationController {
     @RequestMapping(value = "/mobile-api/getNotifications", method = RequestMethod.POST)
     public NotificationResponse getNotifications(@RequestParam String eToken,
                                                  @RequestParam String base64PublicKey) {
-        NotificationResponse response = new NotificationResponse();
-        Key DESKey = KeyExchangeHelper.getKey(base64PublicKey);
-        if (DESKey != null) {
-            String token = DESCryptoHelper.decrypt(DESKey, eToken);
+        AESCrypto aes = new AESCrypto(KeyExchangeHelper.getInstance().getKey(base64PublicKey));
+        NotificationResponse response = new NotificationResponse(aes);
+        if (aes.getKey() != null) {
+            String token = aes.decrypt(eToken);
             UserToken userToken = userTokenService.getByToken(token);
             if (userToken != null) {
                 List<Notification> notifications = notificationService.fingByUser(userToken.getUser());
                 if (notifications == null) {
-                    response = new NotificationResponse(NotificationResponse.ErrorType.DATABASE_ERROR.name());
+                    response = new NotificationResponse(NotificationResponse.ErrorType.DATABASE_ERROR.name(),aes);
                 } else {
-                    response = new NotificationResponse(notifications);
+                    response = new NotificationResponse(notifications,aes);
                 }
             } else {
-                response = new NotificationResponse(NotificationResponse.ErrorType.INCORRECT_TOKEN.name());
+                response = new NotificationResponse(NotificationResponse.ErrorType.INCORRECT_TOKEN.name(),aes);
             }
         } else {
-            response = new NotificationResponse(NotificationResponse.ErrorType.BAD_PUBLIC_KEY.name());
+            response = new NotificationResponse(NotificationResponse.ErrorType.BAD_PUBLIC_KEY.name(),aes);
         }
         return response;
     }

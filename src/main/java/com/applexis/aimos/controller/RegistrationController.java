@@ -3,9 +3,9 @@ package com.applexis.aimos.controller;
 import com.applexis.aimos.model.LoginResponse;
 import com.applexis.aimos.model.entity.*;
 import com.applexis.aimos.model.service.*;
-import com.applexis.aimos.utils.DESCryptoHelper;
 import com.applexis.aimos.utils.KeyExchangeHelper;
-import com.applexis.aimos.utils.SHA2Helper;
+import com.applexis.utils.crypto.AESCrypto;
+import com.applexis.utils.crypto.HashHelper;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -71,15 +71,15 @@ public class RegistrationController {
                                          @RequestParam(value = "eAbout", required = false) String eAbout,
                                          @RequestParam String base64PublicKey,
                                          HttpServletRequest request) {
-        Key DESKey = KeyExchangeHelper.getKey(base64PublicKey);
-        if (DESKey != null) {
-            String login = DESCryptoHelper.decrypt(DESKey, eLogin);
-            String password = DESCryptoHelper.decrypt(DESKey, ePassword);
-            String name = DESCryptoHelper.decrypt(DESKey, eName);
-            String surname = DESCryptoHelper.decrypt(DESKey, eSurname);
-            String email = DESCryptoHelper.decrypt(DESKey, eEmail);
-            String phone = DESCryptoHelper.decrypt(DESKey, ePhone);
-            String about = DESCryptoHelper.decrypt(DESKey, eAbout);
+        AESCrypto aes = new AESCrypto(KeyExchangeHelper.getInstance().getKey(base64PublicKey));
+        if (aes.getKey() != null) {
+            String login = aes.decrypt(eLogin);
+            String password = aes.decrypt(ePassword);
+            String name = aes.decrypt(eName);
+            String surname = aes.decrypt(eSurname);
+            String email = aes.decrypt(eEmail);
+            String phone = aes.decrypt(ePhone);
+            String about = aes.decrypt(eAbout);
             if (userService.getByLogin(login) == null) {
                 User user = new User();
                 user.setLogin(login);
@@ -125,16 +125,16 @@ public class RegistrationController {
                 UserToken userToken = new UserToken(user,
                         userAgent.getBrowser().getName(),
                         userAgent.getOperatingSystem().getName(),
-                        SHA2Helper.getSHA512String(UUID.randomUUID().toString(), "token"));
+                        HashHelper.getSHA512String(UUID.randomUUID().toString(), "token"));
 
                 userToken = userTokenService.createNewToken(userToken);
 
-                return new LoginResponse(userToken);
+                return new LoginResponse(userToken, aes);
             } else {
-                return new LoginResponse(LoginResponse.ErrorType.USER_ALREADY_EXIST.name());
+                return new LoginResponse(LoginResponse.ErrorType.USER_ALREADY_EXIST.name(), aes);
             }
         } else {
-            return new LoginResponse(LoginResponse.ErrorType.BAD_PUBLIC_KEY.name());
+            return new LoginResponse(LoginResponse.ErrorType.BAD_PUBLIC_KEY.name(), aes);
         }
     }
 

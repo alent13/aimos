@@ -1,8 +1,10 @@
 package com.applexis.aimos.model;
 
+import com.applexis.utils.crypto.AESCrypto;
+
 import java.util.List;
 
-public class DialogListResponse {
+public class DialogListResponse extends ResponseBase {
 
     public enum ErrorType {
         DATABASE_ERROR,
@@ -10,40 +12,19 @@ public class DialogListResponse {
         INCORRECT_TOKEN
     }
 
-    private boolean success;
-
-    private String errorType;
-
     private List<DialogMinimal> dialogs;
 
-    public DialogListResponse() {
-        this.success = false;
+    public DialogListResponse(AESCrypto aes) {
+        super(aes);
     }
 
-    public DialogListResponse(String errorType) {
-        this.errorType = errorType;
-        this.success = false;
+    public DialogListResponse(String errorType, AESCrypto aes) {
+        super(errorType, aes);
     }
 
-    public DialogListResponse(List<DialogMinimal> dialogs) {
+    public DialogListResponse(List<DialogMinimal> dialogs, AESCrypto aes) {
         this.dialogs = dialogs;
-        this.success = true;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getErrorType() {
-        return errorType;
-    }
-
-    public void setErrorType(String errorType) {
-        this.errorType = errorType;
+        this.success = aes.encrypt(String.valueOf(true));
     }
 
     public List<DialogMinimal> getDialogs() {

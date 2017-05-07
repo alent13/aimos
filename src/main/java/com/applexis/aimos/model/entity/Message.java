@@ -26,7 +26,7 @@ public class Message {
     @Column(name = "message_text")
     private String messageText;
 
-    @Column(name = "datetime")
+    @Column(name = "send_datetime")
     private Date datetime;
 
     public Message() {

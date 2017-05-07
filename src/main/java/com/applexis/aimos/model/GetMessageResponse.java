@@ -1,14 +1,15 @@
 package com.applexis.aimos.model;
 
 import com.applexis.aimos.model.entity.Message;
-import com.applexis.aimos.utils.DSACryptoHelper;
+import com.applexis.utils.crypto.AESCrypto;
+import com.applexis.utils.crypto.DSASign;
 import org.apache.commons.codec.binary.Base64;
 
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetMessageResponse {
+public class GetMessageResponse extends ResponseBase {
 
     public enum ErrorType {
         BAD_PUBLIC_KEY,
@@ -19,35 +20,30 @@ public class GetMessageResponse {
 
     private List<MessageMinimal> messageMinimals;
 
-    public boolean success;
-
-    public String errorType;
-
-    public GetMessageResponse() {
-        this.success = false;
+    public GetMessageResponse(AESCrypto aes) {
+        super(aes);
     }
 
-    public GetMessageResponse(String errorType) {
-        this.success = false;
-        this.errorType = errorType;
+    public GetMessageResponse(String errorType, AESCrypto aes) {
+        super(errorType, aes);
     }
 
-    public GetMessageResponse(List<Message> messages) {
+    public GetMessageResponse(List<Message> messages, AESCrypto aes) {
         this.messageMinimals = new ArrayList<>();
         if (messages != null) {
             for (Message message : messages) {
-                KeyPair keyPair = DSACryptoHelper.generateKeyPair();
-                String signature = Base64.encodeBase64String(DSACryptoHelper.generateSignature(keyPair.getPrivate(), message.getMessageText().getBytes()));
+                KeyPair keyPair = DSASign.generateKeyPair();
+                String signature = Base64.encodeBase64String(DSASign.generateSignature(keyPair.getPrivate(), message.getMessageText().getBytes()));
                 this.messageMinimals.add(
                         new MessageMinimal(message.getSender().getId(),
                                 message.getMessageText(),
                                 message.getKey(),
                                 signature,
-                                DSACryptoHelper.getPublicKeyString(keyPair.getPublic()),
-                                message.getDatetime())
+                                DSASign.getPublicKeyString(keyPair.getPublic()),
+                                message.getDatetime(), aes)
                 );
             }
-            this.success = true;
+            this.success = aes.encrypt(String.valueOf(true));
         }
     }
 
@@ -57,21 +53,5 @@ public class GetMessageResponse {
 
     public void setMessageMinimals(List<MessageMinimal> messageMinimals) {
         this.messageMinimals = messageMinimals;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getErrorType() {
-        return errorType;
-    }
-
-    public void setErrorType(String errorType) {
-        this.errorType = errorType;
     }
 }
