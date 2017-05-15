@@ -10,7 +10,6 @@ import java.util.List;
 public class DialogResponse extends ResponseBase {
 
     public enum ErrorType {
-        SUCCESS,
         INCORRECT_ID,
         DATABASE_ERROR,
         BAD_PUBLIC_KEY,

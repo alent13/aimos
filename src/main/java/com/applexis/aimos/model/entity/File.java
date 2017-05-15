@@ -3,13 +3,9 @@ package com.applexis.aimos.model.entity;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by applexis on 08.04.2017.
- */
-
 @Entity
 @Table(name = "files")
-public class File {
+public class File implements FSItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +14,12 @@ public class File {
 
     @Column(name = "path")
     private String path;
+
+    @Column(name = "filename")
+    private String name;
+
+    @Column(name = "encrypt_key")
+    private String key;
 
     @Column(name = "size")
     private Long size;
@@ -38,21 +40,28 @@ public class File {
     @JoinColumn(name = "id_access_mode")
     private AccessMode accessMode;
 
+    @ManyToOne
+    @JoinColumn(name = "id_directory")
+    private Directory parentDirectory;
+
     @Column(name = "hash_code")
     private String hash;
 
     public File() {
     }
 
-    public File(String path, Long size, Date addDatetime,
-                Date lastModifiedDatetime, User user,
-                AccessMode accessMode, String hash) {
+    public File(String path, String name, String key, Long size,
+                Date addDatetime, Date lastModifiedDatetime, User user,
+                AccessMode accessMode, Directory parentDirectory, String hash) {
         this.path = path;
+        this.name = name;
+        this.key = key;
         this.size = size;
         this.addDatetime = addDatetime;
         this.lastModifiedDatetime = lastModifiedDatetime;
         this.user = user;
         this.accessMode = accessMode;
+        this.parentDirectory = parentDirectory;
         this.hash = hash;
     }
 
@@ -70,6 +79,22 @@ public class File {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getSize() {
@@ -110,5 +135,21 @@ public class File {
 
     public void setAccessMode(AccessMode accessMode) {
         this.accessMode = accessMode;
+    }
+
+    public Directory getParentDirectory() {
+        return parentDirectory;
+    }
+
+    public void setParentDirectory(Directory parentDirectory) {
+        this.parentDirectory = parentDirectory;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 }

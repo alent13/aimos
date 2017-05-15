@@ -2,10 +2,6 @@ package com.applexis.aimos.model.entity;
 
 import javax.persistence.*;
 
-/**
- * Created by applexis on 08.04.2017.
- */
-
 @Entity
 @Table(name = "d_access_mode")
 public class AccessMode {

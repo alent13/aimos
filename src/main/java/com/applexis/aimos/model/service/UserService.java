@@ -1,5 +1,6 @@
 package com.applexis.aimos.model.service;
 
+import com.applexis.aimos.model.entity.FSItem;
 import com.applexis.aimos.model.entity.User;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public interface UserService {
     User getContact(String login);
 
     List<User> getContacts(String loginStart);
+    List<FSItem> getAllFiles(User user);
 
     void delete(User user);
     void delete(Long id);

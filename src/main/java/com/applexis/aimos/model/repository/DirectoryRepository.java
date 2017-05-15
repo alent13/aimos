@@ -1,13 +1,13 @@
 package com.applexis.aimos.model.repository;
 
 import com.applexis.aimos.model.entity.Directory;
+import com.applexis.aimos.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- * Created by applexis on 08.04.2017.
- */
+import java.util.List;
+
 public interface DirectoryRepository extends JpaRepository<Directory, Long> {
 
-
+    List<Directory> findByParentIdAndUser(Long parentId, User user);
 
 }

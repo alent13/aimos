@@ -2,13 +2,9 @@ package com.applexis.aimos.model.entity;
 
 import javax.persistence.*;
 
-/**
- * Created by applexis on 08.04.2017.
- */
-
 @Entity
 @Table(name = "directories")
-public class Directory {
+public class Directory implements FSItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,14 +25,19 @@ public class Directory {
     @JoinColumn(name = "id_access_mode")
     private AccessMode accessMode;
 
+    @Column(name = "hash_code")
+    private String hash;
+
     public Directory() {
     }
 
-    public Directory(String name, Long parentId, User user, AccessMode accessMode) {
+    public Directory(String name, Long parentId, User user,
+                     AccessMode accessMode, String hash) {
         this.name = name;
         this.parentId = parentId;
         this.user = user;
         this.accessMode = accessMode;
+        this.hash = hash;
     }
 
     public Long getId() {
@@ -77,5 +78,13 @@ public class Directory {
 
     public void setAccessMode(AccessMode accessMode) {
         this.accessMode = accessMode;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 }

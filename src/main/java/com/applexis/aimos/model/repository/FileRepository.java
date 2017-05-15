@@ -1,13 +1,14 @@
 package com.applexis.aimos.model.repository;
 
 import com.applexis.aimos.model.entity.File;
+import com.applexis.aimos.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- * Created by applexis on 08.04.2017.
- */
+import java.util.List;
+
 public interface FileRepository extends JpaRepository<File, Long> {
 
-
+    List<File> findByParentDirectoryAndUser(Long parentDirectory, User user);
+    File findFirstByPathAndNameAndUser(String path, String name, User user);
 
 }

@@ -2,10 +2,11 @@ package com.applexis.aimos.controller;
 
 import com.applexis.aimos.model.LoginResponse;
 import com.applexis.aimos.model.entity.*;
+import com.applexis.aimos.model.entity.File;
 import com.applexis.aimos.model.service.*;
 import com.applexis.aimos.utils.KeyExchangeHelper;
+import com.applexis.utils.HashHelper;
 import com.applexis.utils.crypto.AESCrypto;
-import com.applexis.utils.crypto.HashHelper;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.security.Key;
 import java.util.Date;
 import java.util.Objects;
@@ -128,6 +130,9 @@ public class RegistrationController {
                         HashHelper.getSHA512String(UUID.randomUUID().toString(), "token"));
 
                 userToken = userTokenService.createNewToken(userToken);
+
+                java.io.File root = new java.io.File("./" + user.getLogin());
+                root.mkdir();
 
                 return new LoginResponse(userToken, aes);
             } else {
