@@ -79,12 +79,12 @@ public class FileData {
         this.hash = hash;
     }
 
-    public FileData(FileData item, String status, AESCrypto aes) {
+    public FileData(FileData item, Long parentId, String status, AESCrypto aes) {
         this.id = item.id;
         this.name = item.name;
         this.path = item.path;
         this.isFolder = item.isFolder;
-        this.parentId = item.parentId;
+        this.parentId = aes.encrypt(String.valueOf(parentId));
         this.treeParent = item.treeParent;
         this.createDatetime = item.createDatetime;
         this.lastModificationDatetime = item.lastModificationDatetime;

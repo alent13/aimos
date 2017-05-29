@@ -7,7 +7,7 @@ import com.applexis.aimos.model.service.*;
 import com.applexis.aimos.utils.KeyExchangeHelper;
 import com.applexis.utils.crypto.AESCrypto;
 import com.applexis.utils.crypto.DSASign;
-import com.applexis.utils.crypto.HashHelper;
+import com.applexis.utils.HashHelper;
 import com.applexis.utils.crypto.RSACrypto;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;

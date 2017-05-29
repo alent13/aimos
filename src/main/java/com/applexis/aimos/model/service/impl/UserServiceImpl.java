@@ -55,8 +55,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<FSItem> getAllFiles(User user) {
         List<FSItem> fsList = new ArrayList<>();
+        Directory zeroDir = directoryRepository.findOne(0L);
         List<Directory> rootDirs = directoryRepository.findByParentIdAndUser(0L, user);
-        List<File> rootFiles = fileRepository.findByParentDirectoryAndUser(0L, user);
+        List<File> rootFiles = fileRepository.findByParentDirectoryAndUser(zeroDir, user);
         fsList.addAll(rootDirs);
         fsList.addAll(rootFiles);
         Stack<Directory> dirIdStack = new Stack<>();
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
         while (dirIdStack.size() > 0) {
             Directory cDir = dirIdStack.pop();
             List<Directory> tmpDirs = directoryRepository.findByParentIdAndUser(cDir.getId(), user);
-            List<File> tmpFiles = fileRepository.findByParentDirectoryAndUser(cDir.getId(), user);
+            List<File> tmpFiles = fileRepository.findByParentDirectoryAndUser(cDir, user);
             fsList.addAll(tmpDirs);
             fsList.addAll(tmpFiles);
             dirIdStack.addAll(tmpDirs);

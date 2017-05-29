@@ -1,14 +1,15 @@
 package com.applexis.aimos.model;
 
 import com.applexis.utils.crypto.AESCrypto;
-import javafx.stage.FileChooserBuilder;
 
 public class FileUploadResponse extends ResponseBase {
 
     public enum ErrorType {
         DATABASE_ERROR,
         BAD_PUBLIC_KEY,
-        INCORRECT_TOKEN
+        INCORRECT_TOKEN,
+        INCORRECT_FILE_DATA,
+        FILE_SAVE_ERROR
     }
 
     private FileData fileData;

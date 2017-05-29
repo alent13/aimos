@@ -8,6 +8,7 @@ public class SyncResponse extends ResponseBase {
 
     public enum ErrorType {
         BAD_PUBLIC_KEY,
+        BAD_FILE_DATA,
         INCORRECT_TOKEN,
         DATABASE_ERROR
     }

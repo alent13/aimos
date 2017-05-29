@@ -3,6 +3,7 @@ package com.applexis.aimos.model.service.impl;
 import com.applexis.aimos.model.entity.Directory;
 import com.applexis.aimos.model.entity.File;
 import com.applexis.aimos.model.entity.User;
+import com.applexis.aimos.model.repository.DirectoryRepository;
 import com.applexis.aimos.model.repository.FileRepository;
 import com.applexis.aimos.model.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class FileServiceImpl implements FileService {
 
     @Autowired
     FileRepository repository;
+    @Autowired
+    DirectoryRepository directoryRepository;
 
     @Override
     public File getById(Long id) {
@@ -32,7 +35,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public List<File> getUserRootFiles(User user) {
-        return repository.findByParentDirectoryAndUser(0L, user);
+        Directory zeroDir = directoryRepository.findOne(0L);
+        return repository.findByParentDirectoryAndUser(zeroDir, user);
     }
 
     @Override
